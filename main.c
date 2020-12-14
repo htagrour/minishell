@@ -1,7 +1,15 @@
-#include <stdio.h>
+#include "minishell.h"
 
-int main()
+
+int main (void)
 {
-	printf("hello world\n");
-	return (0);
+    char *line;
+    int i = 1;
+	while(i > 0)
+	{
+        i  = get_next_line(1, &line);
+        parse(line);
+        free(line);
+	} 
+    return 0;
 }
