@@ -1,18 +1,25 @@
 #include "../minishell.h"
 
 // simple splite using ; as delimetor
-int parse(char *line)
+int parse(char *line, t_command **commands)
 {
     int value;
-    char **commandes;
-    int i = 0;
-    value = 1;
+    char **str;
+    char **temp;
+    int i;
 
-    commandes = ft_split(line, ';');
-    while (commandes[i])
+    str = ft_split(line, ';');
+    value = ft_array_len((void **)str);
+    *commands = malloc(sizeof(t_command) * i);
+    i = 0;
+    while (str[i])
     {
-        printf("%s\n", commandes[i++]);
+        temp = ft_split(str[i], ' ');
+        commands[i]->command = ft_strdup(temp[0]);
+        commands[i]->args = ft_strdup(temp[1]);
+        i++;
     }
-    free_array((void**)commandes);
+    free_array((void**)str);
+    free_array((void**)temp);
     return value;
 }

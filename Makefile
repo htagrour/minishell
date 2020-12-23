@@ -6,18 +6,18 @@
 #    By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/22 16:29:25 by htagrour          #+#    #+#              #
-#    Updated: 2020/12/14 05:50:41 by htagrour         ###   ########.fr        #
+#    Updated: 2020/12/18 01:42:03 by htagrour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=minishell.a
 
-SRC = get_next_line/get_next_line.c\
-	  get_next_line/get_next_line_utils.c\
-	  utils/utils.c\
-	  libft/ft_split.c\
-	  parsing/parse.c\
-	  main.c
+SRC = get_next_line/*.c\
+		libft/*.c\
+		parsing/*.c\
+		utils/*.c\
+		execution/*.c\
+		*.c
 
 OBJECT = *.o
 
@@ -25,10 +25,12 @@ all: $(NAME)
 
 $(NAME):
 
-	gcc -Wall -Wextra -Werror -c $(SRC)  -D BUFFER_SIZE=10
+	gcc -c $(SRC) -D BUFFER_SIZE=10 
+	#-Wall -Wextra -Werror
 	ar rc $(NAME) $(OBJECT)
 	ranlib $(NAME)
-	gcc -Wall -Wextra -Werror $(NAME) -o minishell
+	gcc -fsanitize=address $(NAME) -o minishell
+	rm -f $(OBJECT) 
 
 clean:
 	rm -f $(OBJECT) 
