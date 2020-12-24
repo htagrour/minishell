@@ -6,7 +6,7 @@ int main(void)
 {
 	char **tab;
 	int i = 0;
-	tab = updated_split("echo 'hello wordl;hello';cmd;", ';');
+	tab = updated_split("echo 'hello wordl;hello';hello;cmd;", ';');
 	while (tab[i])
 		printf("%s\n", tab[i++]);
 }

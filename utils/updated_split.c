@@ -11,14 +11,13 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 static int		get_word_number(char const *str, char del)                                                                                 // echo "hello ';world"; cmd
 {
-	int			i;
-	int			space_flag;
-	int			words_number;
-	int			spec1;
-    char         spec_char;
+	int		i;
+	int		space_flag;
+	int		words_number;
+	int		spec1;
+	char		spec_char;
 
 
 	words_number = 0;
@@ -29,16 +28,15 @@ static int		get_word_number(char const *str, char del)                          
 	i = 0;
 	while (str[i])
 	{
-        if (str[i] == '\'' || str[i] == '"')
-        {
-		    spec1 += (str[i] != spec_char) ? 1: 0;
+		if (str[i] == '\'' || str[i] == '"')
+		{
+			spec1 += (str[i] != spec_char) ? 1: 0;
 			spec_char = (!spec1) ? str[i] : spec_char;
 			spec1 %= 2;
-        }        
-		if (str[i] == del && !spec1)
-		{
-			space_flag = 1;
 		}
+
+		if (str[i] == del && !spec1)
+			space_flag = 1;
 		else
 		{
 			words_number += space_flag;
@@ -49,28 +47,49 @@ static int		get_word_number(char const *str, char del)                          
 	return (words_number);
 }
 
-// static char **get_tokens(const char *str, int wnb, int del)
-// {
-// 	char **tab;
-// 	int i;
-// 	int j;
-// 	int len;
-	
-// 	i = 0;
-// 	j = 0;
-// 	if (!(tab = malloc(sizeof(char*) * (wnb + 1))))
-// 		return NULL;
-// 	while (str[i])
-// 	{
-// 		len = postion[j] - i;
-// 		tab[j] = malloc(sizeof(char) * (len + 1));
-// 		ft_strlcpy(tab[j], str + i, len + 1);
-// 		i += len;
-// 		j++;
-// 	}
-// 	tab[j] = 0;
-// 	return tab;
-// }
+ static char **get_tokens(const char *str, int wnb, int del)
+ {
+ 	char **tab;
+ 	int i;
+ 	int j;
+ 	int len;
+	int spec1;
+	int spec_char;
+
+
+
+ 	i = 0;
+ 	j = 0;
+	spec1 =0;
+	spec_char = ' ';
+ 	if (!(tab = malloc(sizeof(char*) * (wnb + 1))))
+ 		return NULL;
+ 	while (str[i])
+ 	{
+		 while (str[i] == del)
+		 	i++;
+		len = 0;
+		if (str[i])
+		{
+			while(str[len + i] && !(str[len + i] == del && !spec1))
+			{
+				if (str[len + i] == '\'' || str[len + i] == '"')
+				{
+					spec1 += (str[i + len] != spec_char) ? 1: 0;
+					spec_char = (!spec1) ? str[i + len] : spec_char;
+					spec1 %= 2;
+				}
+				len++;
+			}
+			tab[j] = malloc(sizeof(char) * (len + 1));
+			ft_strlcpy(tab[j], str + i, len + 1);
+			i += len;
+			j++;
+		}
+ 	}
+ 	tab[j] = 0;
+ 	return tab;
+ }
 
 char			**updated_split(char const *str, char del)
 {

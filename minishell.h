@@ -1,9 +1,10 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 #include "get_next_line/get_next_line.h"
-// #include "libft/libft.h"
+#include "libft/libft.h"
 #include <stdio.h>
 #include <fcntl.h>
+#include <string.h>
 
 
 
