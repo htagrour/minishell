@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    makefile                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/22 16:29:25 by htagrour          #+#    #+#              #
-#    Updated: 2020/12/18 01:42:03 by htagrour         ###   ########.fr        #
+#    Updated: 2021/01/04 15:17:27 by htagrour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRC = get_next_line/*.c\
 		parsing/*.c\
 		utils/*.c\
 		execution/*.c\
-		*.c
+		main.c
 
 OBJECT = *.o
 
@@ -25,11 +25,11 @@ all: $(NAME)
 
 $(NAME):
 
-	gcc -c $(SRC) -D BUFFER_SIZE=10 
+	gcc -c $(SRC) -D BUFFER_SIZE=10 -g
 	#-Wall -Wextra -Werror
 	ar rc $(NAME) $(OBJECT)
 	ranlib $(NAME)
-	gcc -fsanitize=address $(NAME) -o minishell
+	gcc -fsanitize=address $(NAME) -o minishell -g
 	rm -f $(OBJECT) 
 
 clean:

@@ -4,23 +4,21 @@
 int main (void)
 {
     char *line;
-    t_command *commands;
-    int exe_return;
-    int comm_number;
+    t_command **commands;
 
-    // int i = 1;
-    // while (i > 0)
-    // {
-    //     printf("my_shell");
-    //     i = get_next_line(1, &line);
-    //     parse(line, &commands);
-    //     exe_return = execute(commands, comm_number);
-    //     free(line);
-    //     free_command_struct(commands, comm_number);
-    // }
-
-    char **str;
-    
-    str = ft_split("hello\";\"hi;cmd1;cmd2", ';');
+    int i = 1;
+    int j;
+    int fd = open("test.txt", O_RDONLY);
+    while (i > 0)
+    {
+        //printf("\033[1;31m");
+        ft_putstr_fd(BGRN, STDOUT_FILENO);
+        ft_putstr_fd("my_shell> ", STDOUT_FILENO);
+        ft_putstr_fd(RESET, STDOUT_FILENO);
+        i = get_next_line(STDIN_FILENO, &line);
+        parse(line, &commands);
+        //free commands array
+        free(line);
+    }
     return 0;
 }

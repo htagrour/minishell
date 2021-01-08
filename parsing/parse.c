@@ -1,25 +1,40 @@
 #include "../minishell.h"
 
 // simple splite using ; as delimetor
-int parse(char *line, t_command **commands)
+int parse(char *line, t_command ***commands)
 {
-    int value;
-    char **str;
-    char **temp;
+    int value = 1;
     int i;
+    char **temp1;
+    char **temp2;
+    int elem_number;
+    int j = 0;
 
-    str = ft_split(line, ';');
-    value = ft_array_len((void **)str);
-    *commands = malloc(sizeof(t_command) * i);
+    
+    elem_number = 0;
     i = 0;
-    while (str[i])
+    //splitting by ; and get main commnds
+    temp1 = updated_split(line, ';', &elem_number);
+    *commands = malloc(sizeof(t_command*) * (elem_number + 1));
+    // splitting by | and get sub command
+    while (temp1[i])
     {
-        temp = ft_split(str[i], ' ');
-        commands[i]->command = ft_strdup(temp[0]);
-        commands[i]->args = ft_strdup(temp[1]);
+        j = 0;
+        //geting subcommand
+        temp2 = updated_split(temp1[i], '|', &elem_number);
+        (*commands)[i] = malloc(sizeof(t_command) * (elem_number + 1));
+        //(*commands)[i]->args = updated_split(temp2, ' ', &elem_number);
+        while (temp2[j])
+        {
+            //check for redirection
+            //simple cases
+            printf("%s\n", temp2[j]);
+            j++;
+        }
+        free_array((void**)temp2);
         i++;
     }
-    free_array((void**)str);
-    free_array((void**)temp);
+    free_array((void**)temp1);
+    printf("%d\n", elem_number);
     return value;
 }

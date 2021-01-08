@@ -6,12 +6,13 @@
 /*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 00:30:20 by htagrour          #+#    #+#             */
-/*   Updated: 2020/12/22 03:29:20 by htagrour         ###   ########.fr       */
+/*   Updated: 2020/12/29 10:54:32 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-static int		get_word_number(char const *str, char del)                                                                                 // echo "hello ';world"; cmd
+
+static int		get_word_number(char const *str, char del)
 {
 	int		i;
 	int		space_flag;
@@ -91,13 +92,11 @@ static int		get_word_number(char const *str, char del)                          
  	return tab;
  }
 
-char			**updated_split(char const *str, char del)
+char			**updated_split(char const *str, char del, int *ele_number)
 {
-	int			wnb;
 	if (!str)
 		return (NULL);
-	wnb = get_word_number(str, del);
-	printf("%d\n", wnb);
+	*ele_number = get_word_number(str, del);
 	
-	return (get_tokens(str, wnb, del));	
+	return (get_tokens(str, *ele_number, del));	
 }
