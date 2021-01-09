@@ -28,6 +28,7 @@ int parse(char *line, t_command ***commands)
         {
             //check for redirection
             //simple cases
+            
             printf("%s\n", temp2[j]);
             j++;
         }
@@ -35,6 +36,5 @@ int parse(char *line, t_command ***commands)
         i++;
     }
     free_array((void**)temp1);
-    printf("%d\n", elem_number);
     return value;
 }

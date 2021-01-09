@@ -6,7 +6,7 @@
 /*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 00:30:20 by htagrour          #+#    #+#             */
-/*   Updated: 2020/12/29 10:54:32 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/01/08 16:28:56 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int		get_word_number(char const *str, char del)
 	int		space_flag;
 	int		words_number;
 	int		spec1;
+	char 	prev;
 	char		spec_char;
 
 
@@ -27,9 +28,10 @@ static int		get_word_number(char const *str, char del)
 	spec_char = ' ';
 	space_flag = 1;
 	i = 0;
+	prev = ' ';
 	while (str[i])
 	{
-		if (str[i] == '\'' || str[i] == '"')
+		if ((str[i] == '\'' || str[i] == '"') && prev != 92)
 		{
 			spec1 += (str[i] != spec_char) ? 1: 0;
 			spec_char = (!spec1) ? str[i] : spec_char;
@@ -43,6 +45,7 @@ static int		get_word_number(char const *str, char del)
 			words_number += space_flag;
 			space_flag = 0;
 		}
+		prev = str[i];
 		i++;
 	}
 	return (words_number);
@@ -56,6 +59,7 @@ static int		get_word_number(char const *str, char del)
  	int len;
 	int spec1;
 	int spec_char;
+	char prev;
 
 
 
@@ -63,6 +67,7 @@ static int		get_word_number(char const *str, char del)
  	j = 0;
 	spec1 =0;
 	spec_char = ' ';
+	prev = ' ';
  	if (!(tab = malloc(sizeof(char*) * (wnb + 1))))
  		return NULL;
  	while (str[i])
@@ -74,12 +79,13 @@ static int		get_word_number(char const *str, char del)
 		{
 			while(str[len + i] && !(str[len + i] == del && !spec1))
 			{
-				if (str[len + i] == '\'' || str[len + i] == '"')
+				if ((str[len + i] == '\'' || str[len + i] == '"') &&  prev != 92)
 				{
 					spec1 += (str[i + len] != spec_char) ? 1: 0;
 					spec_char = (!spec1) ? str[i + len] : spec_char;
 					spec1 %= 2;
 				}
+				prev = str[len + i];
 				len++;
 			}
 			tab[j] = malloc(sizeof(char) * (len + 1));
