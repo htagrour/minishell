@@ -11,13 +11,19 @@
 #define BLKHB "\e[0;100m"
 #define BGRN "\e[1;32m"
 
+typedef struct  s_redirection
+{
+    int type;
+    char *file;
+} t_redirection;
 
 typedef struct s_command
 {
     char *command;
-    char **args;
-    int input;
-    int output;
+    t_list args;
+
+    t_list in_redx;
+    t_list out_redx;
 } t_command;
 
 // typedef struct s_list
@@ -32,6 +38,7 @@ int		parse(char *line, t_command ***commands);
 void	free_array(void **array);
 void    free_command_struct(t_command *commands, int struct_num);
 int     execute(t_command *commande, int comm_number);
+int     ft_get_args(t_command *t_command, char *str);
 // void	ft_lstadd_front(t_list **alst, t_list *new);
 // t_list			*ft_lstnew(char *part);
 #endif

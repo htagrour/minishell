@@ -19,19 +19,12 @@ int parse(char *line, t_command ***commands)
     // splitting by | and get sub command
     while (temp1[i])
     {
-        j = 0;
+        j = -1;
         //geting subcommand
         temp2 = updated_split(temp1[i], '|', &elem_number);
         (*commands)[i] = malloc(sizeof(t_command) * (elem_number + 1));
-        //(*commands)[i]->args = updated_split(temp2, ' ', &elem_number);
-        while (temp2[j])
-        {
-            //check for redirection
-            //simple cases
-            
-            printf("%s\n", temp2[j]);
-            j++;
-        }
+        while (temp2[++j])
+            ft_get_args((*commands)[j], temp2[j]);
         free_array((void**)temp2);
         i++;
     }
