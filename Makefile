@@ -12,8 +12,8 @@
 
 NAME=minishell.a
 
-SRC = get_next_line/*.c\
-		libft/*.c\
+SRC = get_line/*.c\
+		library/*.c\
 		parsing/*.c\
 		utils/*.c\
 		execution/*.c\
