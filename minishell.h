@@ -20,19 +20,13 @@ typedef struct  s_redirection
 typedef struct s_command
 {
     char *command;
-    t_list args;
-
-    t_list in_redx;
-    t_list out_redx;
+    t_list *args;
+    int test;
+    t_list *in_redx; //type = 0;
+    t_list *out_redx; // type = 1;
 } t_command;
 
-// typedef struct s_list
-// {
-//     char *part;
-//     struct  s_list *next;
-    
-// } t_list;
-//utils
+
 char	**updated_split(char const *str, char del, int *ele_number);
 int		parse(char *line, t_command ***commands);
 void	free_array(void **array);

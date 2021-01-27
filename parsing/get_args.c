@@ -5,29 +5,42 @@ int is_red(char c) // is a redirection char
 	return (c == '<' || c == '>');
 }
 
-int get_file(t_command *command, char *str, int *i)
+int get_file(t_command *command, char *str, int i)
 {
-	int double_red = 0;
+	int len;
+	int double_red;
 
-	*i += 1;
-	if (is_red(str[*i]) && str[*i] == str[*i -1])
+
+	double_red = 0;
+	len = 0;
+	int type = (str[i - 1] == '<');
+
+	if (is_red(str[i]) && str[i] == str[i -1])
 	{
-		if (str[*i] == '<')
-			//error
+		if (str[i] == '<')
 			return 0;
 		double_red = 1;
-		*i+= 1;
+		i++;
 	}
-	while(str[*i] && str[*i] == ' ')
-		*i+=1;
-	if (is_red(str[*i]))
+	while(str[i] && str[i] == ' ')
+		i++;
+	if (is_red(str[i]))
 		//error
 		return 0;
-	int j = 0;
-	while(str[*i + j] && !is_red(str[*i + j]) && str[*i + j] != ' ')
-		write(1,&str[*i + j++], 1);
-	write(1,"|\n", 2);
-	return 1;
+	while(str[i + len] && !is_red(str[i + len]) && str[i + len] != ' ')
+		len++;
+	t_redirection *red = (t_redirection*) malloc(sizeof(t_redirection));
+
+	red->type = double_red;
+	red->file = ft_substr(str, i, len);
+	// if (!red[0])
+	// 	error
+
+	// if (type)
+	// 	ft_lstadd_back(&(command->in_redx), ft_lstnew((void*)red));
+	// else
+	// 	ft_lstadd_back(&(command->out_redx), ft_lstnew((void*)red));
+	return i;
 }
 
 int ft_get_args(t_command *command, char *str)
@@ -40,7 +53,10 @@ int ft_get_args(t_command *command, char *str)
 	    while(str[i] == ' ')
 		  i++;
 	    if (is_red(str[i]))
-		    get_file(command, str, &i);
+		{
+			 i = get_file(command, str, ++i);
+		    // printf("%d\n", command->test);
+		}
 	    i++;
     }
     return value;

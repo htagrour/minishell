@@ -24,7 +24,8 @@ int parse(char *line, t_command ***commands)
         temp2 = updated_split(temp1[i], '|', &elem_number);
         (*commands)[i] = malloc(sizeof(t_command) * (elem_number + 1));
         while (temp2[++j])
-            ft_get_args((*commands)[j], temp2[j]);
+            ft_get_args(*(commands)[j], temp2[j]);
+       // (*commands)[j] = NULL;
         free_array((void**)temp2);
         i++;
     }
