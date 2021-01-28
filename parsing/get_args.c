@@ -11,6 +11,7 @@ int get_file(t_command *command, char *str, int i)
 	int double_red;
 
 
+
 	double_red = 0;
 	len = 0;
 	int type = (str[i - 1] == '<');
@@ -36,10 +37,10 @@ int get_file(t_command *command, char *str, int i)
 	// if (!red[0])
 	// 	error
 
-	// if (type)
-	// 	ft_lstadd_back(&(command->in_redx), ft_lstnew((void*)red));
-	// else
-	// 	ft_lstadd_back(&(command->out_redx), ft_lstnew((void*)red));
+	if (type)
+		ft_lstadd_back(&(command->in_redx), ft_lstnew((void*)red)); // in red should not have list but it's ok
+	else
+		ft_lstadd_back(&(command->out_redx), ft_lstnew((void*)red));
 	return i;
 }
 
@@ -47,7 +48,8 @@ int ft_get_args(t_command *command, char *str)
 {
     int value = 1;
     int i = 0;
-
+	
+	ft_bzero(command, sizeof(t_command));
     while(str[i])
     {
 	    while(str[i] == ' ')
@@ -55,7 +57,6 @@ int ft_get_args(t_command *command, char *str)
 	    if (is_red(str[i]))
 		{
 			 i = get_file(command, str, ++i);
-		    // printf("%d\n", command->test);
 		}
 	    i++;
     }

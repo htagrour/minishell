@@ -1,8 +1,9 @@
 #include "minishell.h"
 #include <time.h>
+
 void prints(void *str)
 {
-    printf("%s ", ((t_redirection*)str)->file);
+    printf("%s\n", ((t_redirection*)str)->file);
 }
 
 void print_commands(t_command **commands)
@@ -11,11 +12,11 @@ void print_commands(t_command **commands)
     int j;
 
     i = 0;
-    while (commands[i])
+    while (i < 1)
     {
         printf("%d command\n", i);
         j = 0;
-        while (commands[i][j].in_redx)
+        while (j < 1)
         {
            // printf("cmd:%s\n", commands[i][j].command);
            printf("in files: ");
@@ -24,7 +25,9 @@ void print_commands(t_command **commands)
            printf("out files: ");
            ft_lstiter(commands[i][j].out_redx, &prints);
            printf("\n");
+           j++;
         }
+        i++;
         
     }
 }
