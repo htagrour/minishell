@@ -16,6 +16,7 @@ int parse(char *line, t_command ***commands)
     //splitting by ; and get main commnds
     temp1 = updated_split(line, ';', &elem_number);
     *commands = (t_command**)malloc(sizeof(t_command**) * (elem_number + 1));
+    ft_bzero(*commands, sizeof(t_command**));
     // splitting by | and get sub command
     while (temp1[i])
     {
@@ -25,7 +26,6 @@ int parse(char *line, t_command ***commands)
         (*commands)[i] = malloc(sizeof(t_command) * (elem_number + 1));
         while (temp2[++j])
             ft_get_args(&(*commands)[i][j], temp2[j]);
-       // (*commands)[j] = NULL;
         free_array((void**)temp2);
         i++;
     }

@@ -6,6 +6,11 @@ void prints(void *str)
     printf("%s\n", ((t_redirection*)str)->file);
 }
 
+void printss(void *str)
+{
+    printf("%s\n", (char*)str);
+}
+
 void print_commands(t_command **commands)
 {
     int i;
@@ -14,11 +19,13 @@ void print_commands(t_command **commands)
     i = 0;
     while (i < 1)
     {
-        printf("%d command\n", i);
         j = 0;
         while (j < 1)
         {
-           // printf("cmd:%s\n", commands[i][j].command);
+           printf("cmd:%s\n", commands[i][j].command);
+           printf("args: ");
+           ft_lstiter(commands[i][j].args, &printss);
+           printf("\n");
            printf("in files: ");
            ft_lstiter(commands[i][j].in_redx, &prints);
            printf("\n");

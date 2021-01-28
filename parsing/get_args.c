@@ -4,6 +4,21 @@ int is_red(char c) // is a redirection char
 {
 	return (c == '<' || c == '>');
 }
+int get_cmd_arg(t_command *command, char *str, int i)
+{
+	int len;
+	char *ptr;
+
+	len = 0;
+	while (str[i + len] && str[i + len] != ' ' && !is_red(str[len + i]))
+		len++;
+	ptr = ft_substr(str, i, len);
+	if (!command->command)
+		command->command = ptr;
+	else
+		ft_lstadd_back(&(command->args), ft_lstnew((void*)ptr));
+	return i + len;
+}
 
 int get_file(t_command *command, char *str, int i)
 {
@@ -41,7 +56,7 @@ int get_file(t_command *command, char *str, int i)
 		ft_lstadd_back(&(command->in_redx), ft_lstnew((void*)red)); // in red should not have list but it's ok
 	else
 		ft_lstadd_back(&(command->out_redx), ft_lstnew((void*)red));
-	return i;
+	return i + len;
 }
 
 int ft_get_args(t_command *command, char *str)
@@ -55,9 +70,9 @@ int ft_get_args(t_command *command, char *str)
 	    while(str[i] == ' ')
 		  i++;
 	    if (is_red(str[i]))
-		{
-			 i = get_file(command, str, ++i);
-		}
+			i = get_file(command, str, ++i);
+		else
+			i = get_cmd_arg(command, str, i);
 	    i++;
     }
     return value;
