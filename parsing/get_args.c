@@ -8,10 +8,25 @@ int get_cmd_arg(t_command *command, char *str, int i)
 {
 	int len;
 	char *ptr;
+	int spec1;
+	int spec_char;
+	char prev;
 
+	spec1 =0;
+	spec_char = ' ';
+	prev = ' ';
 	len = 0;
-	while (str[i + len] && str[i + len] != ' ' && !is_red(str[len + i]))
+	while (str[i + len] && !((str[i + len] == ' ' || is_red(str[len + i])) && !spec1))
+	{
+		if ((str[len + i] == '\'' || str[len + i] == '"') &&  prev != 92)
+		{
+			spec1 += (str[i + len] != spec_char) ? 1: 0;
+			spec_char = (!spec1) ? str[i + len] : spec_char;
+			spec1 %= 2;
+		}
+		prev = str[len + i];
 		len++;
+	}
 	ptr = ft_substr(str, i, len);
 	if (!command->command)
 		command->command = ptr;
@@ -63,12 +78,16 @@ int ft_get_args(t_command *command, char *str)
 {
     int value = 1;
     int i = 0;
+
 	
+
+
 	ft_bzero(command, sizeof(t_command));
     while(str[i])
     {
 	    while(str[i] == ' ')
 		  i++;
+		 
 	    if (is_red(str[i]))
 			i = get_file(command, str, ++i);
 		else

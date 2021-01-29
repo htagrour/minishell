@@ -33,6 +33,4 @@ void	free_array(void **array);
 void    free_command_struct(t_command *commands, int struct_num);
 int     execute(t_command *commande, int comm_number);
 int     ft_get_args(t_command *t_command, char *str);
-// void	ft_lstadd_front(t_list **alst, t_list *new);
-// t_list			*ft_lstnew(char *part);
 #endif

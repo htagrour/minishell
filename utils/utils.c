@@ -10,15 +10,8 @@ void free_array(void **array)
         free(array[i++]);
     free(array);
 }
+// todo
+void free_command_array(t_command ***commands)
+{
 
-// void free_command_struct(t_command *commands, int struct_num)
-// {
-//     int i;
-
-//     i = -1;
-//     while (++i < struct_num)
-//     {
-//         free(commands[i].command);
-//         free(commands[i].args);
-//     }
-// }
+}
