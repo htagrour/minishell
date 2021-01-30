@@ -55,11 +55,13 @@ int main (void)
         ft_putstr_fd(BGRN, STDOUT_FILENO);
         ft_putstr_fd("my_shell> ", STDOUT_FILENO);
         ft_putstr_fd(RESET, STDOUT_FILENO);
-        i = get_next_line(STDIN_FILENO, &line);
-        if (line)
+        i = get_next_line(fd, &line);
+        if (line[0])
+        {
             parse(line, &commands);
-        print_commands(commands);
-        //free_command_array(&commands);
+            print_commands(commands);
+        }
+        free_command_array(&commands);
         free(line);
         end = clock();
         timespend += (double)(end - begin) / CLOCKS_PER_SEC;

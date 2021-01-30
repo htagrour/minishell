@@ -8,24 +8,17 @@ int get_cmd_arg(t_command *command, char *str, int i)
 {
 	int len;
 	char *ptr;
-	int spec1;
-	int spec_char;
-	char prev;
 
-	spec1 =0;
-	spec_char = ' ';
-	prev = ' ';
+	t_var_bag bag;
+
+	ft_bzero(&bag, sizeof(bag));
 	len = 0;
-	while (str[i + len] && !((str[i + len] == ' ' || is_red(str[len + i])) && !spec1))
+	while (str[i + len] && !((str[i + len] == ' ' || is_red(str[len + i])) && !bag.brack_flag))
 	{
-		if ((str[len + i] == '\'' || str[len + i] == '"') &&  prev != 92)
-		{
-			spec1 += (str[i + len] != spec_char) ? 1: 0;
-			spec_char = (!spec1) ? str[i + len] : spec_char;
-			spec1 %= 2;
-		}
-		prev = str[len + i];
-		len++;
+
+			adjust_var_bag(&bag, str[len+i], i);
+			bag.prev_char = str[len + i];
+			len++;
 	}
 	ptr = ft_substr(str, i, len);
 	if (!command->command)

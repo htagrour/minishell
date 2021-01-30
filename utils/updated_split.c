@@ -6,7 +6,7 @@
 /*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 00:30:20 by htagrour          #+#    #+#             */
-/*   Updated: 2021/01/08 16:28:56 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/01/30 17:23:55 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,39 +15,31 @@
 static int		get_word_number(char const *str, char del)
 {
 	int		i;
-	int		space_flag;
+	int		del_flag;
 	int		words_number;
-	int		spec1;
-	char 	prev;
-	char		spec_char;
 
+	t_var_bag bag;
 
+	ft_bzero(&bag, sizeof(bag));
 	words_number = 0;
-	spec1 = 0;
-
-	spec_char = ' ';
-	space_flag = 1;
+	del_flag = 1;
 	i = 0;
-	prev = ' ';
 	while (str[i])
-	{
-		if ((str[i] == '\'' || str[i] == '"') && prev != 92)
-		{
-			spec1 += (str[i] != spec_char) ? 1: 0;
-			spec_char = (!spec1) ? str[i] : spec_char;
-			spec1 %= 2;
-		}
-
-		if (str[i] == del && !spec1)
-			space_flag = 1;
+	{	
+		adjust_var_bag(&bag, str[i], i);
+		if (str[i] == del && !bag.brack_flag)
+			del_flag = 1;
 		else
 		{
-			words_number += space_flag;
-			space_flag = 0;
+			words_number += del_flag;
+			del_flag = 0;
 		}
-		prev = str[i];
+		bag.prev_char = str[i];
 		i++;
 	}
+	if (bag.brack_flag)
+		printf("ERROR\n");
+	
 	return (words_number);
 }
 
@@ -57,17 +49,12 @@ static int		get_word_number(char const *str, char del)
  	int i;
  	int j;
  	int len;
-	int spec1;
-	int spec_char;
-	char prev;
+	t_var_bag bag;
 
-
-
+	ft_bzero(&bag, sizeof(bag));
  	i = 0;
  	j = 0;
-	spec1 =0;
-	spec_char = ' ';
-	prev = ' ';
+
  	if (!(tab = malloc(sizeof(char*) * (wnb + 1))))
  		return NULL;
  	while (str[i])
@@ -77,15 +64,10 @@ static int		get_word_number(char const *str, char del)
 		len = 0;
 		if (str[i])
 		{
-			while(str[len + i] && !(str[len + i] == del && !spec1))
+			while(str[len + i] && !(str[len + i] == del && !bag.brack_flag))
 			{
-				if ((str[len + i] == '\'' || str[len + i] == '"') &&  prev != 92)
-				{
-					spec1 += (str[i + len] != spec_char) ? 1: 0;
-					spec_char = (!spec1) ? str[i + len] : spec_char;
-					spec1 %= 2;
-				}
-				prev = str[len + i];
+				adjust_var_bag(&bag, str[len+i], i);
+				bag.prev_char = str[len + i];
 				len++;
 			}
 			tab[j] = malloc(sizeof(char) * (len + 1));
