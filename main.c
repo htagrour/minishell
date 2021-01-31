@@ -17,8 +17,9 @@ void print_commands(t_command **commands)
     int j;
 
     i = 0;
-    while (i < 1)
-    {
+    while (i < g_big_comm)
+    {   
+        g_small_comm = commands[i][0].test;
         j = 0;
         while (j < 1)
         {
@@ -34,6 +35,7 @@ void print_commands(t_command **commands)
            printf("\n");
            j++;
         }
+        printf("---------------------------------------\n");
         i++;
         
     }
@@ -53,10 +55,10 @@ int main (void)
         i = get_next_line(STDIN_FILENO, &line);
         if (line[0])
         {
-            commands = parse(line, &commands);
+            commands = parse(line);
             print_commands(commands);
+            free_command_array(commands);
         }
-        free_command_array(commands);
         //free_command_array(commands);
         printf("\n");
         free(line);
