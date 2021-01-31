@@ -43,10 +43,12 @@ typedef struct s_command
 } t_command;
 
 t_list *env_variable;
+int     g_big_comm;
+int     g_small_comm;
 char	**updated_split(char const *str, char del, int *ele_number);
 int		parse(char *line, t_command ***commands);
 void	free_array(void **array);
-void    free_command_struct(t_command ***commands);
+void    free_command_array(t_command **commands);
 int     execute(t_command *commande, int comm_number);
 int     ft_get_args(t_command *t_command, char *str);
 void    adjust_var_bag(t_var_bag *bag, char c ,int i);

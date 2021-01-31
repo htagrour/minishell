@@ -72,9 +72,6 @@ int ft_get_args(t_command *command, char *str)
     int value = 1;
     int i = 0;
 
-	
-
-
 	ft_bzero(command, sizeof(t_command));
     while(str[i])
     {

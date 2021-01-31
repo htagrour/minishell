@@ -3,7 +3,6 @@
 // simple splite using ; as delimetor
 int parse(char *line, t_command ***commands)
 {
-    int value = 1;
     int i;
     char **temp1;
     char **temp2;
@@ -15,6 +14,7 @@ int parse(char *line, t_command ***commands)
     i = 0;
     //splitting by ; and get main commnds
     temp1 = updated_split(line, ';', &elem_number);
+    g_big_comm = elem_number;
     *commands = (t_command**)malloc(sizeof(t_command**) * (elem_number + 1));
     ft_bzero(*commands, sizeof(t_command**));
     // splitting by | and get sub command
@@ -25,10 +25,13 @@ int parse(char *line, t_command ***commands)
         temp2 = updated_split(temp1[i], '|', &elem_number);
         (*commands)[i] = malloc(sizeof(t_command) * (elem_number + 1));
         while (temp2[++j])
-           ft_get_args(&(*commands)[i][j], temp2[j]);
+        {
+            (*commands)[i][j].test = elem_number;
+            ft_get_args(&(*commands)[i][j], temp2[j]);
+        }
         free_array((void**)temp2);
         i++;
     }
     free_array((void**)temp1);
-    return value;
+    return ;
 }

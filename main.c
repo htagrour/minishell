@@ -41,31 +41,25 @@ void print_commands(t_command **commands)
 int main (void)
 {
     char *line;
-    double timespend;
     t_command **commands;
-    clock_t begin;
-    clock_t end;
     int i = 1;
     int j;
     int fd = open("test.txt", O_RDONLY);
     while (i > 0)
     {
-        timespend = 0.0;
-        begin = clock();
         ft_putstr_fd(BGRN, STDOUT_FILENO);
         ft_putstr_fd("my_shell> ", STDOUT_FILENO);
         ft_putstr_fd(RESET, STDOUT_FILENO);
-        i = get_next_line(fd, &line);
+        i = get_next_line(STDIN_FILENO, &line);
         if (line[0])
         {
-            parse(line, &commands);
+            commands = parse(line, &commands);
             print_commands(commands);
         }
-        free_command_array(&commands);
+        free_command_array(commands);
+        //free_command_array(commands);
+        printf("\n");
         free(line);
-        end = clock();
-        timespend += (double)(end - begin) / CLOCKS_PER_SEC;
-        printf("%fs\n", timespend);
     }
     return 0;
 }

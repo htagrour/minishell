@@ -24,29 +24,27 @@ void free_array(void **array)
 // todo
 void free_command(t_command *command)
 {
-    if (command->command)
-        free(command->command);
+    free(command->command);
     ft_lstclear(&(command->in_redx),&free);
     ft_lstclear(&(command->out_redx), &free);
-
-}
-int array_len(void *array)
-{
-    return (sizeof(array) / sizeof(array[0]));
+    ft_lstclear(&(command->args), &free);
 }
 
-void free_command_array(t_command ***commands)
+void free_command_array(t_command **commands)
 {
     int i;
     int j;
     
-
     i = 0;
-    while ( i < array_len(*commands))
+    while (i < g_big_comm)
     {   
-        while(j < array_len(*commands[i]))
+        g_small_comm = commands[i][0].test;
+        j = 0;
+        while(i < g_small_comm)
         {
-            free_command(&((*commands)[i][j]));
+            free_command(&((commands)[i][j]));
+            //ft_bzero(&commands[i][j], sizeof(t_command));
+            free(&commands[i][j]);
             j++;
         }
         i++;
