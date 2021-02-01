@@ -1,39 +1,58 @@
-#include "minishell.h"
-typedef struct  s_test
-{
-    char *str;
-    int num;
-}t_test;
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
-void f(void *d)
+/*
+ * loop over commands by sharing
+ * pipes.
+ */
+
+static void
+pipeline(char ***cmd)
 {
-    printf("%s %d\n", ((t_test*)d)->str, ((t_test*)d)->num);
+	int fd[2];
+	pid_t pid;
+	int fdd = 0;				/* Backup */
+
+	while (*cmd != NULL) {
+		pipe(fd);				/* Sharing bidiflow */
+		if ((pid = fork()) == -1) {
+			perror("fork");
+			exit(1);
+		}
+		if (pid == 0) {
+			dup2(fdd, 0);
+			if (*(cmd + 1) != NULL) {
+				dup2(fd[1], 1);
+			}
+			close(fd[0]);
+            // is builtin function
+			execvp((*cmd)[0], *cmd);
+			exit(1);
+		}
+		wait(NULL); 		/* Collect childs */
+		close(fd[1]);
+		fdd = fd[0];
+		cmd++;
+	}
 }
 
-void c(void *s)
-{
-    t_test *temp = s;
-    if (temp->str)
-        free(temp->str);
-    temp->num = 0;
-}
+/*
+ * Compute multi-pipeline based
+ * on a command list.
+ */
+
+#include <unistd.h>
+#include <stdio.h>
 
 int main()
 {
-    t_list *list;
-    int i = 0;
+char *argv[] = {"/Users/htagrour/goinfre/.brew/bin/minikube"};
+char *newargv[] = { NULL };
+char *newenviron[] = { NULL };
 
-    t_test *test;
-
-    list = (t_list*)malloc(sizeof(t_list));
-    ft_bzero(&list, sizeof(t_list*));
-    test = (t_test*)malloc(sizeof(t_test));
-    test->str = ft_strdup("hello");
-    test->num = 17;
-    printf("hello wordl\n");
-    ft_lstadd_back(&list, ft_lstnew((void*)test));
-    ft_lstiter(list, &f);
-    ft_lstclear(&list, &c);
-    ft_lstiter(list, &f);
-    return 0;
+execve(argv[0], newargv, newenviron);
+perror("execve");
+printf("j'ai fais ls!\n");
+return 0;
 }

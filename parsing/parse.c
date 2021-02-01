@@ -26,6 +26,7 @@ t_command **parse(char *line)
         {
             commands[i][j].test = g_small_comm;
             ft_get_args(&commands[i][j], temp2[j]);
+            //may be i should put execution part here
         }
         free_array((void**)temp2);
         i++;
