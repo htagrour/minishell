@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
+#include <wait.h>
 
 /*
  * loop over commands by sharing
@@ -47,12 +49,8 @@ pipeline(char ***cmd)
 
 int main()
 {
-char *argv[] = {"/Users/htagrour/goinfre/.brew/bin/minikube"};
-char *newargv[] = { NULL };
-char *newenviron[] = { NULL };
-
-execve(argv[0], newargv, newenviron);
-perror("execve");
-printf("j'ai fais ls!\n");
-return 0;
+	char *agrs[] = {"/bin/ls"};
+	char *env[] = {NULL};
+	execve("/bin/ls", agrs, env);
+	return 0;
 }

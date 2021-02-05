@@ -1,1 +1,1 @@
->file>file ; hi there| hi
+echo 'hello hi '

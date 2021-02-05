@@ -4,6 +4,46 @@ int is_red(char c) // is a redirection char
 {
 	return (c == '<' || c == '>');
 }
+
+
+char **get_final_args(t_list *list)
+{
+	char **args;
+	char *temp;
+	char *temp1;
+	int i;
+	char c;
+	t_var_bag bag;
+
+	i = 0;
+	args = (char**)malloc(sizeof(char**) * (ft_lstsize(list) + 1));
+	while (list)
+	{
+		temp = (char*)list->content;
+		bzero(&bag, sizeof(bag));
+		args[i] = ft_strdup("");
+		while ((c = *temp) != 0)
+		{	
+			adjust_var_bag(&bag, c, 0);
+			//finish this
+			if (!(c == '\'' && (bag.slash_flag || (bag.brack_flag && bag.spec_char != '\''))||
+					(c == '\\' && bag.slash_flag)))
+			{
+				temp1 = args[i];
+				//if c = $ and !slash && brack ect 
+				//get env variable 
+			    args[i] = ft_strjoin(args[i], &c);
+				free(temp1);
+			}
+			temp++;
+		}
+		i++;
+		list = list->next;
+	}
+	args[i] = NULL;
+	return args;
+}
+
 int get_cmd_arg(t_command *command, char *str, int i)
 {
 	int len;
@@ -15,16 +55,12 @@ int get_cmd_arg(t_command *command, char *str, int i)
 	len = 0;
 	while (str[i + len] && !((str[i + len] == ' ' || is_red(str[len + i])) && !bag.brack_flag))
 	{
-
 			adjust_var_bag(&bag, str[len+i], i);
-			bag.prev_char = str[len + i];
 			len++;
 	}
+	
 	ptr = ft_substr(str, i, len);
-	if (!command->command)
-		command->command = ptr;
-	else
-		ft_lstadd_back(&(command->args), ft_lstnew((void*)ptr));
+	ft_lstadd_back(&(command->args), ft_lstnew((void*)ptr));
 	return i + len;
 }
 
@@ -72,7 +108,6 @@ int ft_get_args(t_command *command, char *str)
     int value = 1;
     int i = 0;
 
-	ft_bzero(command, sizeof(t_command));
     while(str[i])
     {
 	    while(str[i] == ' ')
