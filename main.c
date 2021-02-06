@@ -10,32 +10,29 @@ void printss(void *str)
 {
     printf("%s\n", (char*)str);
 }
-void print_array(char **tab)
-{
-    while (*tab)
-    {
-        printf("%s\n", *tab);
-        tab++;
-    }
-    
-}
+
 void print_commands(t_command **commands)
 {
     int i;
     int j;
 
-    char **tab;
     i = 0;
     while (i < g_big_comm)
     {   
         g_small_comm = commands[i][0].test;
         j = 0;
-        while (j < g_small_comm)
+        while (j < 1)
         {
-          // printf("cmd:%s\n", commands[i][j].command);
-          tab = get_final_args(commands[i][j].args);
-          print_array(tab);
-          free_array((void**)tab);
+           printf("cmd:%s\n", commands[i][j].command);
+           printf("args: ");
+           ft_lstiter(commands[i][j].args, &printss);
+           printf("\n");
+           printf("in files: ");
+           ft_lstiter(commands[i][j].in_redx, &prints);
+           printf("\n");
+           printf("out files: ");
+           ft_lstiter(commands[i][j].out_redx, &prints);
+           printf("\n");
            j++;
         }
         printf("---------------------------------------\n");
@@ -47,11 +44,9 @@ int main (void)
 {
     char *line;
     t_command **commands;
-    t_hash_map *env;
-
     int i = 1;
+    int j;
     int fd = open("test.txt", O_RDONLY);
-    env = init_hash_map(100);
     while (i > 0)
     {
         ft_putstr_fd(BGRN, STDOUT_FILENO);
@@ -62,12 +57,11 @@ int main (void)
         {
             commands = parse(line);
             print_commands(commands);
-            //execute(commands, env);
             free_command_array(commands);
         }
+        //free_command_array(commands);
         printf("\n");
         free(line);
     }
-    free_hash_map(env);
     return 0;
 }

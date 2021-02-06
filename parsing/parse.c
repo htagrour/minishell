@@ -21,10 +21,9 @@ t_command **parse(char *line)
         j = -1;
         //geting subcommand
         temp2 = updated_split(temp1[i], '|', &g_small_comm);
-        commands[i] = malloc(sizeof(t_command) * (g_small_comm));
+        commands[i] = malloc(sizeof(t_command) * (g_small_comm + 1));
         while (temp2[++j])
         {
-	        ft_bzero(&commands[i][j], sizeof(t_command));
             commands[i][j].test = g_small_comm;
             ft_get_args(&commands[i][j], temp2[j]);
             //may be i should put execution part here

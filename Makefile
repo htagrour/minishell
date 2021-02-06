@@ -17,7 +17,6 @@ SRC = get_line/*.c\
 		parsing/*.c\
 		utils/*.c\
 		execution/*.c\
-		hash_table/*.c\
 		main.c
 
 OBJECT = *.o

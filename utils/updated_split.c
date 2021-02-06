@@ -26,6 +26,7 @@ static int		get_word_number(char const *str, char del)
 	i = 0;
 	while (str[i])
 	{	
+		adjust_var_bag(&bag, str[i], i);
 		if (str[i] == del && !bag.brack_flag)
 			del_flag = 1;
 		else
@@ -33,7 +34,7 @@ static int		get_word_number(char const *str, char del)
 			words_number += del_flag;
 			del_flag = 0;
 		}
-		adjust_var_bag(&bag, str[i], i);
+		bag.prev_char = str[i];
 		i++;
 	}
 	if (bag.brack_flag)
@@ -66,6 +67,7 @@ static int		get_word_number(char const *str, char del)
 			while(str[len + i] && !(str[len + i] == del && !bag.brack_flag))
 			{
 				adjust_var_bag(&bag, str[len+i], i);
+				bag.prev_char = str[len + i];
 				len++;
 			}
 			tab[j] = malloc(sizeof(char) * (len + 1));
