@@ -6,7 +6,7 @@ int is_red(char c) // is a redirection char
 }
 
 
-char **get_final_args(t_list *list)
+char **get_final_args(t_list *list, t_hash_map *hm)
 {
 	char **args;
 	char *temp;

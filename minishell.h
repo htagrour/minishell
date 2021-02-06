@@ -2,6 +2,7 @@
 #define MINISHELL_H
 #include "get_line/get_next_line.h"
 #include "library/libft.h"
+#include "hash_table/hash_table.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>

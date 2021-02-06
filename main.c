@@ -47,9 +47,11 @@ int main (void)
 {
     char *line;
     t_command **commands;
+    t_hash_map *env;
+
     int i = 1;
-    int j;
     int fd = open("test.txt", O_RDONLY);
+    env = init_hash_map(100);
     while (i > 0)
     {
         ft_putstr_fd(BGRN, STDOUT_FILENO);
@@ -60,11 +62,12 @@ int main (void)
         {
             commands = parse(line);
             print_commands(commands);
-            //free_command_array(commands);
+            //execute(commands, env);
+            free_command_array(commands);
         }
-        free_command_array(commands);
         printf("\n");
         free(line);
     }
+    free_hash_map(env);
     return 0;
 }

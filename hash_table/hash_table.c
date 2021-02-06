@@ -1,5 +1,6 @@
-#include "hash_table.h"
 #include <string.h>
+#include "hash_table.h"
+
 
 unsigned int hash(const char *str,int size)
 {
@@ -11,6 +12,7 @@ unsigned int hash(const char *str,int size)
         hash = (hash + *str) % size;
         str++;  
     }
+    return hash;
     
 }
 
@@ -18,21 +20,22 @@ t_hash_map *init_hash_map(int size)
 {
     t_hash_map *hm;
 
-    if (!(hm = malloc(sizeof(hm))))
+    if (!(hm = malloc(sizeof(t_hash_map))))
         return (NULL);
+    hm->item = malloc(sizeof(t_listo*) * size);
+    if (hm->item == NULL)
+       return NULL;
+    bzero(hm->item, sizeof(t_listo*) * size);
     hm->size = size;
-    hm->item = (t_list**)malloc(sizeof(t_list) * size);
-    if (!hm->item)
-        return NULL;
-    bzero(hm->item, sizeof(hm->item));
+    hm->elem_total = 0;
     return (hm);
 }
 
-t_list *new_item(const char *key, const char *value)
+t_listo *new_item(const char *key, const char *value)
 {
-    t_list *item;
+    t_listo *item;
 
-    if (!(item = malloc(sizeof(item))))
+    if (!(item = malloc(sizeof(t_listo))))
         return (NULL);
     item->key = strdup(key);
     item->value = strdup(value);
@@ -43,8 +46,8 @@ t_list *new_item(const char *key, const char *value)
 
 int set_value(const char *key, const char *value, t_hash_map *hm)
 {
-    t_list *temp;
-    t_list *item;
+    t_listo *temp;
+    t_listo *item;
 
     temp = hm->item[hash(key,hm->size)];
     if (temp)
@@ -60,6 +63,7 @@ int set_value(const char *key, const char *value, t_hash_map *hm)
             item = new_item(key, value);
             item->next = hm->item[hash(key,hm->size)];
             hm->item[hash(key,hm->size)] = item;
+            hm->elem_total += 1;
         }else
         {
             free(temp->value);
@@ -69,13 +73,14 @@ int set_value(const char *key, const char *value, t_hash_map *hm)
     {
         item = new_item(key, value);
         hm->item[hash(key,hm->size)] = item;
+        hm->elem_total += 1;
     } 
     return 1;
 }
 
 char *get_value(const char *key, t_hash_map *hm)
 {
-    t_list *temp;
+    t_listo *temp;
     char *value;
     temp = hm->item[hash(key, hm->size)];
     while (temp)
@@ -90,12 +95,41 @@ char *get_value(const char *key, t_hash_map *hm)
         value = strdup(temp->value);
     return (value);
 }
+int delet_value(const char *key, t_hash_map *hm)
+{
+    t_listo *temp;
+    t_listo *prev;
+    int hash_code;
+
+    hash_code = hash(key, hm->size);
+    temp = hm->item[hash_code];
+    prev = NULL;
+    while(strcmp(key, temp->key) && temp->next)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (!strcmp(key, temp->key))
+    {
+        if (prev)
+            prev->next = temp->next;
+        else
+            hm->item[hash_code] = temp->next;
+        free(temp->key);
+        free(temp->value);
+        free(temp);
+        hm->elem_total -= 1; 
+    }
+    return 1;
+}
 
 int free_hash_map(t_hash_map *hm)
 {
-    t_list *temp;
-    t_list *temp1;
-    while (--hm->size)
+    t_listo *temp;
+    t_listo *temp1;
+
+    while (--hm->size >= 0)
     {
         temp = hm->item[hm->size];
         while (temp)
@@ -106,7 +140,9 @@ int free_hash_map(t_hash_map *hm)
             free(temp);
             temp = temp1;
         }
+        hm->item[hm->size] = NULL;
     }
+    free(hm->item);
     free(hm);
     return 1;
 }
