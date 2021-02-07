@@ -33,3 +33,18 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	tab[j] = '\0';
 	return (tab);
 }
+
+char 	*ft_add_char(const char *str, char c)
+{
+	int i;
+	char *tab;
+
+	i = ft_strlen(str);
+	tab = malloc(sizeof(char) * i + 2);
+	if (!tab)
+		return NULL;
+	ft_strlcpy(tab, str, i + 1);
+	tab[i++] = c;
+	tab[i] = 0;
+	return (tab);
+}

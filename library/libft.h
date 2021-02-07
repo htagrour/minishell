@@ -49,6 +49,8 @@ char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void			ft_putendl_fd(char *s, int fd);
 void			ft_putnbr_fd(int nb, int fd);
 char			*ft_strtrim(char const *s1, char const *set);
+char 			*ft_add_char(const char *str, char c);
+
 typedef	struct	s_list
 {
 	void			*content;
