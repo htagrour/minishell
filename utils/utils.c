@@ -39,12 +39,12 @@ void free_struct_file(void *red)
 
 void free_command(t_command *command)
 {
-    //free(command->command);
     if (command->in_redx)
         ft_lstclear(&(command->in_redx),&free_struct_file);
     if (command->out_redx)
         ft_lstclear(&(command->out_redx), &free_struct_file);
     ft_lstclear(&(command->args), &free);
+    free(command);
 }
 
 void free_command_array(t_command **commands)
@@ -62,7 +62,7 @@ void free_command_array(t_command **commands)
             free_command(&((commands)[i][j]));
             j++;
         }
-        free(commands[i]);
+        //free(commands[i]);
         i++;
     }
     free(commands);

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <wait.h>
+#include <signal.h>
 
 /*
  * loop over commands by sharing
@@ -49,9 +50,6 @@ pipeline(char ***cmd)
 
 int main()
 {
-	char *agrs[] = {"/bin/echo"};
-	char *env[] = {"hello=hi", NULL};
-	int i = execve("/bin/echo", agrs, env);
-	printf("%d", i);
+	printf("hello world\n");
 	return 0;
 }

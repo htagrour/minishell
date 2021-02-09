@@ -48,10 +48,10 @@ void print_commands(t_command **commands ,t_hash_map *env)
         
     }
 }
+
 int main (void)
 {
     char *line;
-    t_command **commands;
     t_hash_map *env;
 
     int i = 1;
@@ -64,15 +64,9 @@ int main (void)
         ft_putstr_fd(BGRN, STDOUT_FILENO);
         ft_putstr_fd("my_shell> ", STDOUT_FILENO);
         ft_putstr_fd(RESET, STDOUT_FILENO);
-        i = get_next_line(fd, &line);
-        // if (line[0])
-        // {
-            commands = parse(line, env);
-            print_commands(commands, env);
-            //execute(commands, env);
-            free_command_array(commands);
-        // }
-        printf("\n");
+        i = get_next_line(STDIN_FILENO, &line);
+        if (line[0])
+            process_line(line, env);
         free(line);
     }
     free_hash_map(env);

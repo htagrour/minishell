@@ -91,7 +91,7 @@ int				extract_file(t_command *command, char **str,
 	return (1);
 }
 
-int				ft_get_args(t_command *command, char *str, t_hash_map *hm)
+int				get_cmd(t_command *command, char *str, t_hash_map *hm)
 {
 	t_var_bag	bag;
 	int			i;
