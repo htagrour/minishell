@@ -55,7 +55,7 @@ int get_file(t_command *command, char *str, t_var_bag *bag,int i)
 		return 0;
 	while(str[i + len] && !is_red(str[i + len]) && str[i + len] != ' ')
 		len++;
-	t_redirection *red = (t_redirection*) malloc(sizeof(t_redirection));
+	t_redx *red = (t_redx*) malloc(sizeof(t_redx));
 
 	red->type = double_red;
 	red->file = ft_substr(str, i, len);

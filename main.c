@@ -3,7 +3,7 @@
 
 void prints(void *str)
 {
-    printf("%s\n", ((t_redirection*)str)->file);
+    printf("%s|\n", ((t_redx*)str)->file);
 }
 
 void printss(void *str)
@@ -58,6 +58,7 @@ int main (void)
     int fd = open("test.txt", O_RDONLY);
     env = init_hash_map(100);
     set_value("hi", "1234",env);
+    set_value("?", "0",env);
     while (i > 0)
     {
         ft_putstr_fd(BGRN, STDOUT_FILENO);

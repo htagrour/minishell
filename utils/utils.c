@@ -1,30 +1,5 @@
 #include "../minishell.h"
 
-void adjust_var_bag(t_var_bag *bag, char c ,int i)
-{       
-        bag->slash_flag += (c == 92) ? 1:0;
-        bag->slash_flag %= 2;
-        bag->slash_flag *= (bag->spec_char == '\'' && bag->brack_flag) ? 0 : 1;
-        if ((c == bag->spec_char || !bag->brack_flag) && !bag->slash_flag)
-        {   if (c == '\'' || c == '"')
-            {
-                bag->spec_char = c;
-                bag->brack_flag = (bag->brack_flag + 1) % 2;
-            }
-        }
-        bag->slash_flag *= (c != 92) ? 0 : 1;
-}
-
-int belong(char *str, char c)
-{
-    while(*str)
-    {
-        if (*str == c)
-            return 1;
-        str++;
-    }
-    return 0;
-}
 
 char **list_to_array(t_list *list)
 {
@@ -56,7 +31,7 @@ void free_struct_file(void *red)
 {
     char *temp;
 
-    temp = ((t_redirection*)red)->file;
+    temp = ((t_redx*)red)->file;
     if (temp)
         free(temp);
     free(red);

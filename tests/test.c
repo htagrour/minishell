@@ -49,8 +49,9 @@ pipeline(char ***cmd)
 
 int main()
 {
-	char *agrs[] = {"/bin/ls"};
-	char *env[] = {NULL};
-	execve("/bin/ls", agrs, env);
+	char *agrs[] = {"/bin/echo"};
+	char *env[] = {"hello=hi", NULL};
+	int i = execve("/bin/echo", agrs, env);
+	printf("%d", i);
 	return 0;
 }

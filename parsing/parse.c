@@ -1,7 +1,5 @@
 #include "../minishell.h"
 
-// simple splite using ; as delimetor
-
 t_command **parse(char *line, t_hash_map *hm)
 {
     t_command **commands;
