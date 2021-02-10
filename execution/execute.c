@@ -17,9 +17,7 @@ int get_in_fd(t_command command, int *last_fd)
     while (temp)
     {   
         red = (t_redx*)temp->content;
-        if (!lstat(red->file, &st) && (st.st_mode & S_IRUSR))
-            fd = open(red->file, O_RDONLY);
-        else
+        if ((fd = open(red->file,O_RDONLY)) < 0)
             return (-1);
         temp = temp->next;
     }
@@ -39,8 +37,11 @@ int get_out_fd(t_command command, int *out_fd)
     while(temp)
     {   
         red = (t_redx*)temp->content;
-        // if (!lstat(red->file, &st) && (st.st_mode & S_IWUSR))
-        if (!(fd = open(red->file, O_WRONLY| O_CREAT | O_APPEND)) < 0);
+        if (red->type)
+            fd = open(red->file, O_WRONLY| O_CREAT | O_APPEND);
+        else
+            fd = open(red->file, O_WRONLY| O_CREAT | O_TRUNC);
+        if (fd < 0)
             return (-1);
         temp = temp->next;
     }

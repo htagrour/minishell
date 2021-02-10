@@ -1,1 +1,1 @@
-/bin/cat <main.c
+/bin/echo hello > txt
