@@ -45,11 +45,18 @@ pipeline(char ***cmd)
  * on a command list.
  */
 
-#include <unistd.h>
+       #include <sys/types.h>
+       #include <sys/stat.h>
+       #include <unistd.h>
 #include <stdio.h>
 
-int main()
+int main(int argc, char **argv)
 {
-	printf("hello world\n");
-	return 0;
-}
+    if (argc > 1) {
+        struct stat sb;
+        printf("%s is%s executable.\n", argv[1], stat(argv[1], &sb) == 0 &&
+                                                 sb.st_mode & S_IXUSR ? 
+                                                 "" : " not");
+    }
+    return 0;
+}   

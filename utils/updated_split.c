@@ -12,77 +12,70 @@
 
 #include "../minishell.h"
 
-static int		get_word_number(char const *str, char del)
+static int		get_word_number(char const *str, char del, int *wn)
 {
-	int		i;
-	int		del_flag;
-	int		words_number;
-
-	t_var_bag bag;
+	int			del_flag;
+	t_var_bag	bag;
 
 	ft_bzero(&bag, sizeof(bag));
-	words_number = 0;
+	*wn = 0;
 	del_flag = 1;
-	i = 0;
-	while (str[i])
-	{	
-		if (str[i] == del && !bag.brack_flag)
+	while (*str)
+	{
+		if (*str == del && !bag.brack_flag)
+		{
+			if (del_flag)
+				return (-1);
 			del_flag = 1;
+		}
 		else
 		{
-			words_number += del_flag;
-			del_flag = 0;
+			*wn += del_flag;
+			del_flag = (*str != ' ') ? 0 : 1;
 		}
-		adjust_var_bag(&bag, str[i]);
-		i++;
+		adjust_var_bag(&bag, *str);
+		str++;
 	}
 	if (bag.brack_flag)
-		printf("ERROR\n");
-	
-	return (words_number);
+		return (-1);
+	return (*wn);
 }
 
- static char **get_tokens(const char *str, int wnb, int del)
- {
- 	char **tab;
- 	int i;
- 	int j;
- 	int len;
-	t_var_bag bag;
+static char		**get_tokens(const char *str, int wnb, int del)
+{
+	char		**tab;
+	int			i;
+	int			j;
+	int			len;
+	t_var_bag	bag;
 
 	ft_bzero(&bag, sizeof(bag));
- 	i = 0;
- 	j = 0;
-
- 	if (!(tab = malloc(sizeof(char*) * (wnb + 1))))
- 		return NULL;
- 	while (str[i])
- 	{
-		 while (str[i] == del)
-		 	i++;
+	i = 0;
+	j = 0;
+	if (!(tab = malloc(sizeof(char*) * (wnb + 1))))
+		return (NULL);
+	while (str[i])
+	{
 		len = 0;
-		if (str[i])
+		while (str[len + i] && !(str[len + i] == del && !bag.brack_flag))
 		{
-			while(str[len + i] && !(str[len + i] == del && !bag.brack_flag))
-			{
-				adjust_var_bag(&bag, str[len+i]);
-				len++;
-			}
-			tab[j] = malloc(sizeof(char) * (len + 1));
-			ft_strlcpy(tab[j], str + i, len + 1);
-			i += len;
-			j++;
+			adjust_var_bag(&bag, str[len + i]);
+			len++;
 		}
- 	}
- 	tab[j] = 0;
- 	return tab;
- }
+		tab[j] = malloc(sizeof(char) * (len + 1));
+		ft_strlcpy(tab[j++], str + i, len + 1);
+		i += (len + 1);
+	}
+	tab[j] = 0;
+	return (tab);
+}
 
 char			**updated_split(char const *str, char del, int *ele_number)
 {
 	if (!str)
 		return (NULL);
-	*ele_number = get_word_number(str, del);
-	
-	return (get_tokens(str, *ele_number, del));	
+	*ele_number = get_word_number(str, del, ele_number);
+	if (*ele_number < 0)
+		return (NULL);
+	return (get_tokens(str, *ele_number, del));
 }

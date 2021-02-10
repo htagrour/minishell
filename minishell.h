@@ -8,8 +8,11 @@
 #include <string.h>
 #include <wait.h>
 #include <dirent.h> 
+       #include <sys/types.h>
+       #include <sys/stat.h>
 
-
+#define NOT_VALIDE_IDE "not a valide identifier"
+#define CMD_NOT_FOUND "command not found"
 #define RED "\e[0;31m"
 #define RESET "\e[0m"
 #define BLKHB "\e[0;100m"
@@ -39,6 +42,7 @@ typedef struct s_command
     t_list *in_redx; //type = 0;
     t_list *out_redx; // type = 1;
 } t_command;
+t_list *error;
 
 int     g_big_comm;
 int     g_small_comm;
@@ -56,4 +60,5 @@ int     conditions(char c, t_var_bag bag, char n);
 char	*get_env(char *str, char **ptr, int len, t_hash_map *hm);
 int     execute_cmd(t_command command, int *last_fd, int next_cmd, t_hash_map *hm);
 void   free_command(t_command *command);
+void    print_command(t_command commands ,t_hash_map *env); 
 #endif
