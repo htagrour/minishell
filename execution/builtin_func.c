@@ -25,7 +25,7 @@ int cd(t_command command, t_hash_map *hm)
     if (chdir(path) != 0)
     //error there no such path
         return (-1);
-    set_value("PWD", getcwd(), hm);
+    // set_value("PWD", getcwd(), hm);
     return (0);
 }
 

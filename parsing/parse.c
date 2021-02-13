@@ -13,7 +13,7 @@ int process_cmd(char *temp, int *last_fd,int next,t_hash_map *env)
     return (1);
 }
 
-int process_line(char *line, t_hash_map *env)
+int process_line(char *line, t_hash_map *env, t_list *errors)
 {
     int i;
     char **temp1;
@@ -25,17 +25,16 @@ int process_line(char *line, t_hash_map *env)
     last_fd = 0;
     temp1 = updated_split(line, ';', &g_big_comm);
     if (!temp1)
-        return (1);
+        return (add_error("PARSE ERROR", errors));
     while (temp1[i])
     {
         j = -1;
         temp2 = updated_split(temp1[i], '|', &g_small_comm);
-        if (!temp2)
-            return (1);
+        if (!temp1)
+            return (add_error("PARSE ERROR", errors));
         while (temp2[++j])
             process_cmd(temp2[j], &last_fd,temp2[j + 1] != 0,env);
         free_array((void**)temp2);
-        //print error
         i++;
     }
     free_array((void**)temp1);

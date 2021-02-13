@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
-#include <wait.h>
 #include <dirent.h> 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -17,7 +16,6 @@
 #define RESET "\e[0m"
 #define BLKHB "\e[0;100m"
 #define BGRN "\e[1;32m"
-#define PATH "/home/htagrour/.genymotion:/home/htagrour/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 
 #define ARRAY_LEN(array) (sizeof(array) / sizeof(array[0]))
 
@@ -48,7 +46,7 @@ t_list *error;
 int     g_big_comm;
 int     g_small_comm;
 char	**updated_split(char const *str, char del, int *ele_number);
-int     process_line(char *line, t_hash_map *hm);
+int     process_line(char *line, t_hash_map *hm, t_list *errors);
 void	free_array(void **array);
 void    free_command_array(t_command **commands);
 int     execute(t_command *commande, int comm_number);
@@ -64,5 +62,5 @@ void   free_command(t_command *command);
 void    print_command(t_command commands ,t_hash_map *env);
 // int     cd(t_command command);
 int built_in1(t_command command, t_hash_map *hm);
-int hash_string(char *str);
+int    add_error(char *str, t_list *errors);
 #endif

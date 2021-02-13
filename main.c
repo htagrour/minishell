@@ -51,37 +51,43 @@ void fun(void *str)
     if (temp)
         free(temp);
 }
+void get_external_env(char **envs, t_hash_map *env)
+{
+    char **temp;
 
-int main (void)
+    while (*envs)
+    {
+        temp = ft_split(*envs, '=');
+        set_value(temp[0], temp[1], env);
+        free_array((void**)temp);
+        envs++;
+    }
+}
+int main (int argc, char *argv[], char **envs)
 {
     char *line;
     t_hash_map *env;
     int j;
+    t_list *errors;
     int i = 1;
     char **temp;
     
 
-
-
-    int fd = open("test.txt", O_RDONLY);
     env = init_hash_map(100);
-    set_value("PATH", PATH,env);
-    set_value("TERM", "xterm-256color", env);
-    set_value("?", "0",env);
+    int fd = open("test.txt", O_RDONLY);
     signal(SIGINT, sighandler);
-   // error = (t_list*)malloc(sizeof(t_list));
+   errors = (t_list*)malloc(sizeof(t_list));
     while (i > 0)
     {
         print_shell();
-        i = get_next_line(STDIN_FILENO, &line);
+        i = get_next_line(fd, &line);
         if (line[0])
-            process_line(line, env);
-        
+            process_line(line, env, errors);
         free(line);
     }
     free_hash_map(env);
-    ft_lstclear(&error, &fun);
-    free(error);
+    ft_lstclear(&errors, &fun);
+    free(errors);
 
     return 0;
 }

@@ -43,6 +43,8 @@ int conditions(char c, t_var_bag bag, char n)
 	if (c == '\'' && (!bag.slash_flag && !(bag.brack_flag && bag.spec_char == '"')))
 		return 1;
 	if (c == '\\')
+	{
+
 	 	if (bag.brack_flag && bag.spec_char == '"')
 		{
 			if (belong("$\"\\", n))
@@ -50,6 +52,7 @@ int conditions(char c, t_var_bag bag, char n)
 		}
 		else if (!bag.slash_flag)
 			return 1;
+	}
     return 0;
 }
 
@@ -63,4 +66,5 @@ char		*get_env(char *str, char **ptr, int len, t_hash_map *hm)
 	*ptr = ft_strjoin(*ptr, temp2);
 	free(temp1);
 	free(temp2);
+	return NULL;
 }

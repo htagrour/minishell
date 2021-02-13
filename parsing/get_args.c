@@ -10,8 +10,8 @@ void			get_argument(char **str, char **ptr,
 	if (!conditions(**str, *bag, *(*str + 1)))
 	{
 		temp = *ptr;
-		if (**str != '$' || bag->brack_flag && bag->spec_char == '\'' ||
-			**str == '$' && belong("<>'\" ", *(*str + 1)))
+		if (**str != '$' || (bag->brack_flag && bag->spec_char == '\'') ||
+			(**str == '$' && belong("<>'\" ", *(*str + 1))))
 			*ptr = ft_add_char(*ptr, **str);
 		else
 		{

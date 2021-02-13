@@ -26,8 +26,8 @@ int get_full_path(t_command *command, t_hash_map *hm)
     int i = -1;
 
     cmd = (char*)command->args->content;
-    if (is_built_in(cmd))
-        return (0);
+    // if (is_built_in(cmd))
+    //     return (0);
     path = get_value("PATH", hm);
     if (path[0] || (!stat(cmd, &st) && st.st_mode & S_IXUSR))
     {

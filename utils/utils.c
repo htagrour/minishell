@@ -17,21 +17,13 @@ char **list_to_array(t_list *list)
     return tab;
 }
 
-// int hash_string(char *str)
-// {   
-//     int hashed;
+int    add_error(char *str, t_list *errors)
+{
+    t_list *new_lst;
 
-//     hashed = 0;
-//     if (!str)
-//         return (-1);
-//     while (*str)
-//     {
-//         hashed += *str;
-//         str++;
-//     }
-    
-//     return (hashed);
-// }
+    ft_lstadd_back(&errors, ft_lstnew(ft_strdup(str)));
+    return (1);
+}
 
 void free_array(void **array)
 {

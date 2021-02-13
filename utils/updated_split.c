@@ -6,7 +6,7 @@
 /*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 00:30:20 by htagrour          #+#    #+#             */
-/*   Updated: 2021/01/30 17:23:55 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/02/13 16:26:41 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int		get_word_number(char const *str, char del, int *wn)
 	del_flag = 1;
 	while (*str)
 	{
-		if (*str == del && !bag.brack_flag)
+		if (*str == del && !bag.brack_flag && !bag.slash_flag)
 		{
 			if (del_flag)
 				return (-1);
@@ -59,7 +59,7 @@ static char		**get_tokens(const char *str, int wnb, int del)
 		len = 0;
 		while(*str == del)
 			str++;
-		while (*(str + len) && !(*(str + len) == del && !bag.brack_flag))
+		while (*(str + len) && !(*(str + len) == del && !bag.brack_flag && !bag.slash_flag))
 		{
 			adjust_var_bag(&bag, *(str +len));
 			len++;
