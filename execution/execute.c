@@ -3,7 +3,61 @@
 
 
 // i need to learn about muliple processing
-// void get_path();
+int is_built_in(char *str)
+{
+    return (!strcmp(str,"cmd") ||
+            !strcmp(str,"echo")||
+            !strcmp(str,"export") ||
+            !strcmp(str,"cd")||
+            !strcmp(str,"env")||
+            !strcmp(str,"unset")||
+            !strcmp(str,"pwd")
+            );
+}
+int get_full_path(t_command *command, t_hash_map *hm)
+{
+    char *path;
+    char **temp;
+    char *cmd;
+    char *temp1;
+    void *temp2;
+    struct stat st;
+    int flag = 0;
+    int i = -1;
+
+    cmd = (char*)command->args->content;
+    if (is_built_in(cmd))
+        return (0);
+    path = get_value("PATH", hm);
+    if (path[0] || (!stat(cmd, &st) && st.st_mode & S_IXUSR))
+    {
+        temp = ft_split(path, ':');
+        while (temp[++i])
+        {
+            temp1 = temp[i];
+            temp[i] = ft_add_char(temp[i],'/');
+            free(temp1);
+            temp1 = ft_strjoin(temp[i], cmd);
+            if (!stat(temp1, &st) && (st.st_mode & S_IXUSR))
+            {
+                flag = 1;
+                break;
+            }
+            free(temp1);
+        }
+        free_array((void**)temp);
+    }
+    if (flag)
+    {
+        temp2 = command->args->content;
+        command->args->content = (void*)ft_strdup(temp1);
+        free(temp1);
+        free(temp2);
+    }
+    free(path);
+    return (0);
+}
+
 int get_in_fd(t_command command, int *last_fd)
 {
     t_list *temp;
@@ -38,9 +92,9 @@ int get_out_fd(t_command command, int *out_fd)
     {   
         red = (t_redx*)temp->content;
         if (red->type)
-            fd = open(red->file, O_WRONLY| O_CREAT | O_APPEND);
+            fd = open(red->file, O_RDWR | O_CREAT| O_APPEND, 0644);
         else
-            fd = open(red->file, O_WRONLY| O_CREAT | O_TRUNC);
+            fd = open(red->file, O_RDWR| O_CREAT | O_TRUNC, 0644);
         if (fd < 0)
             return (-1);
         temp = temp->next;
@@ -48,43 +102,46 @@ int get_out_fd(t_command command, int *out_fd)
     *out_fd = fd; 
     return (fd);
 }
-int execute_cmd(t_command command, int *last_fd, int next_cmd, t_hash_map *env)
+int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
 {
     int fd[2];
     pid_t pid;
     char **args;
     char **envs;
-    struct dirent *de;
-    //DIR *dr = opendir(get_value("PATH", env)); 
 
-    args = list_to_array(command.args);
     pipe(fd);
-    envs = hash_to_arr(env);
-    if (get_in_fd(command,last_fd) < 0 ||  get_out_fd(command ,&fd[1]) < 0)
+    
+    //builtin_func(args, env, fd);
+    if (get_full_path(command, env) < 0)
+        return (-1);
+    if (get_in_fd(*command,last_fd) < 0 ||  get_out_fd(*command ,&fd[1]) < 0)
     {
         free_array((void**)args);
         free_array((void**)envs);
         *last_fd = fd[0];
         return (1);
     }
-    //builtin_func(args, env, fd);
-    //adjust_cmd(&command, env);
-    if((pid = fork()) == -1)
-        exit(1);
-    if (!pid)
+    if (built_in1(*command,env))
     {
-        dup2(*last_fd, 0);
-        if (next_cmd || command.out_redx)
-            dup2(fd[1], 1);
-        close(fd[0]);
-        //is built in function
-        execve(*args, args, envs);
-        exit(0);
+        envs = hash_to_arr(env);
+        args = list_to_array(command->args);
+        if((pid = fork()) == -1)
+            exit(1);
+        if (!pid)
+        {
+            dup2(*last_fd, 0);
+            if (next_cmd || command->out_redx)
+                dup2(fd[1], 1);
+            close(fd[0]);
+            // if (built_in2(args,args))
+                execve(*args, args, envs);
+            exit(0);
+        }
+        wait(NULL);
+        close(fd[1]);
+        free_array((void**)args);
+        free_array((void**)envs);
     }
-    wait(NULL);
-    close(fd[1]);
     *last_fd = fd[0];
-    free_array((void**)args);
-    free_array((void**)envs);
-    return 1;
+    return 0;
 }

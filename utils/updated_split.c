@@ -31,7 +31,7 @@ static int		get_word_number(char const *str, char del, int *wn)
 		else
 		{
 			*wn += del_flag;
-			del_flag = (*str != ' ') ? 0 : 1;
+			del_flag = 0;
 		}
 		adjust_var_bag(&bag, *str);
 		str++;
@@ -54,19 +54,21 @@ static char		**get_tokens(const char *str, int wnb, int del)
 	j = 0;
 	if (!(tab = malloc(sizeof(char*) * (wnb + 1))))
 		return (NULL);
-	while (str[i])
+	while (*str != '\0')
 	{
 		len = 0;
-		while (str[len + i] && !(str[len + i] == del && !bag.brack_flag))
+		while(*str == del)
+			str++;
+		while (*(str + len) && !(*(str + len) == del && !bag.brack_flag))
 		{
-			adjust_var_bag(&bag, str[len + i]);
+			adjust_var_bag(&bag, *(str +len));
 			len++;
 		}
-		tab[j] = malloc(sizeof(char) * (len + 1));
-		ft_strlcpy(tab[j++], str + i, len + 1);
-		i += (len + 1);
+		tab[j] = ft_substr(str, 0,len);
+		j++;
+		str += (len);
 	}
-	tab[j] = 0;
+	tab[j] = NULL;
 	return (tab);
 }
 

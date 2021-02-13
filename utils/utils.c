@@ -17,6 +17,22 @@ char **list_to_array(t_list *list)
     return tab;
 }
 
+// int hash_string(char *str)
+// {   
+//     int hashed;
+
+//     hashed = 0;
+//     if (!str)
+//         return (-1);
+//     while (*str)
+//     {
+//         hashed += *str;
+//         str++;
+//     }
+    
+//     return (hashed);
+// }
+
 void free_array(void **array)
 {
     int i;

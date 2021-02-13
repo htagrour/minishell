@@ -8,7 +8,7 @@ int process_cmd(char *temp, int *last_fd,int next,t_hash_map *env)
     ft_bzero(command, sizeof(t_command));
     get_cmd(command, temp, env);
    // print_command(*command, env);
-    execute_cmd(*command, last_fd, next, env);
+    execute_cmd(command, last_fd, next, env);
     free_command(command);
     return (1);
 }

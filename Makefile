@@ -30,7 +30,7 @@ $(NAME):
 	#-Wall -Wextra -Werror
 	ar rc $(NAME) $(OBJECT)
 	ranlib $(NAME)
-	gcc  $(NAME) -fsanitize=address -o minishell -g
+	gcc  $(NAME)  -o minishell -g
 	rm -f $(OBJECT) 
 
 clean:

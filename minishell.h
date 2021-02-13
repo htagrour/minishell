@@ -8,8 +8,8 @@
 #include <string.h>
 #include <wait.h>
 #include <dirent.h> 
-       #include <sys/types.h>
-       #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #define NOT_VALIDE_IDE "not a valide identifier"
 #define CMD_NOT_FOUND "command not found"
@@ -17,6 +17,7 @@
 #define RESET "\e[0m"
 #define BLKHB "\e[0;100m"
 #define BGRN "\e[1;32m"
+#define PATH "/home/htagrour/.genymotion:/home/htagrour/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 
 #define ARRAY_LEN(array) (sizeof(array) / sizeof(array[0]))
 
@@ -58,7 +59,10 @@ int     belong(char *str, char c);
 int     is_red(char c);
 int     conditions(char c, t_var_bag bag, char n);
 char	*get_env(char *str, char **ptr, int len, t_hash_map *hm);
-int     execute_cmd(t_command command, int *last_fd, int next_cmd, t_hash_map *hm);
+int     execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *hm);
 void   free_command(t_command *command);
-void    print_command(t_command commands ,t_hash_map *env); 
+void    print_command(t_command commands ,t_hash_map *env);
+// int     cd(t_command command);
+int built_in1(t_command command, t_hash_map *hm);
+int hash_string(char *str);
 #endif
