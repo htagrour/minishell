@@ -6,7 +6,7 @@
 /*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 00:30:20 by htagrour          #+#    #+#             */
-/*   Updated: 2021/02/13 16:26:41 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/02/14 15:22:22 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,17 @@ static char		**get_tokens(const char *str, int wnb, int del)
 		len = 0;
 		while(*str == del)
 			str++;
-		while (*(str + len) && !(*(str + len) == del && !bag.brack_flag && !bag.slash_flag))
+		if (*str)
 		{
-			adjust_var_bag(&bag, *(str +len));
-			len++;
+			while (*(str + len) && !(*(str + len) == del && !bag.brack_flag && !bag.slash_flag))
+			{
+				adjust_var_bag(&bag, *(str +len));
+				len++;
+			}
+			tab[j] = ft_substr(str, 0,len);
+			j++;
+			str += (len);
 		}
-		tab[j] = ft_substr(str, 0,len);
-		j++;
-		str += (len);
 	}
 	tab[j] = NULL;
 	return (tab);

@@ -74,19 +74,22 @@ int main (int argc, char *argv[], char **envs)
     
 
     env = init_hash_map(100);
+    get_external_env(envs, env);
     int fd = open("test.txt", O_RDONLY);
     signal(SIGINT, sighandler);
-   errors = (t_list*)malloc(sizeof(t_list));
+    //errors = (t_list*)malloc(sizeof(t_list));
+    ft_bzero(&errors, sizeof(t_list));
     while (i > 0)
     {
         print_shell();
-        i = get_next_line(fd, &line);
+        i = get_next_line(STDIN_FILENO, &line);
         if (line[0])
-            process_line(line, env, errors);
+            process_line(line, env, &errors);
+        ft_lstiter(errors, printss);
+        ft_lstclear(&errors, &fun);
         free(line);
     }
     free_hash_map(env);
-    ft_lstclear(&errors, &fun);
     free(errors);
 
     return 0;

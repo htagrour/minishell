@@ -56,13 +56,18 @@ t_redx			*get_file(char **str, t_var_bag *bag, t_hash_map *hm)
 	while (**str && **str == ' ')
 		(*str)++;
 	if (is_red(**str))
-		exit(1);
+		return (NULL);
 	red = (t_redx*)malloc(sizeof(t_redx));
 	if (!red)
 		return (NULL);
 	red->file = ft_strdup("");
 	while (**str && !((is_red(**str) || **str == ' ') && !bag->brack_flag))
 		get_argument(str, &red->file, bag, hm);
+	if (!red->file[0])
+	{
+		free(red);
+		return (NULL);
+	}
 	return (red);
 }
 
@@ -78,11 +83,13 @@ int				extract_file(t_command *command, char **str,
 	if (is_red(*(*str + 1)) && **str == *(*str + 1))
 	{
 		if (*(*str + 1) == '<')
-			exit(1);
+			return (-1);
 		double_red = 1;
 		(*str)++;
 	}
 	red = get_file(str, bag, hm);
+	if (!red)
+		return (-1);
 	red->type = double_red;
 	if (type)
 		ft_lstadd_back(&(command->in_redx), ft_lstnew((void*)red));
@@ -105,7 +112,10 @@ int				get_cmd(t_command *command, char *str, t_hash_map *hm)
 			str++;
 		}
 		if (is_red(*str) && !bag.slash_flag)
-			extract_file(command, &str, &bag, hm);
+		{
+			if (extract_file(command, &str, &bag, hm) < 0)
+				return -1;
+		}
 		else
 			extract_arg(command, &str, &bag, hm);
 	}

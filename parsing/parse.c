@@ -6,14 +6,15 @@ int process_cmd(char *temp, int *last_fd,int next,t_hash_map *env)
     
     command = malloc(sizeof(t_command));
     ft_bzero(command, sizeof(t_command));
-    get_cmd(command, temp, env);
+    if (get_cmd(command, temp, env) < 0)
+        return (print_error("PARSE ERROR", NULL));
    // print_command(*command, env);
     execute_cmd(command, last_fd, next, env);
     free_command(command);
     return (1);
 }
 
-int process_line(char *line, t_hash_map *env, t_list *errors)
+int process_line(char *line, t_hash_map *env, t_list **errors)
 {
     int i;
     char **temp1;
@@ -25,13 +26,13 @@ int process_line(char *line, t_hash_map *env, t_list *errors)
     last_fd = 0;
     temp1 = updated_split(line, ';', &g_big_comm);
     if (!temp1)
-        return (add_error("PARSE ERROR", errors));
+        return (print_error("PARSE ERROR", errors));
     while (temp1[i])
     {
         j = -1;
         temp2 = updated_split(temp1[i], '|', &g_small_comm);
-        if (!temp1)
-            return (add_error("PARSE ERROR", errors));
+        if (!temp2)
+            return (print_error("PARSE ERROR", errors));
         while (temp2[++j])
             process_cmd(temp2[j], &last_fd,temp2[j + 1] != 0,env);
         free_array((void**)temp2);

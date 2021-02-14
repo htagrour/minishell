@@ -46,7 +46,7 @@ t_list *error;
 int     g_big_comm;
 int     g_small_comm;
 char	**updated_split(char const *str, char del, int *ele_number);
-int     process_line(char *line, t_hash_map *hm, t_list *errors);
+int     process_line(char *line, t_hash_map *hm, t_list **errors);
 void	free_array(void **array);
 void    free_command_array(t_command **commands);
 int     execute(t_command *commande, int comm_number);
@@ -62,5 +62,6 @@ void   free_command(t_command *command);
 void    print_command(t_command commands ,t_hash_map *env);
 // int     cd(t_command command);
 int built_in1(t_command command, t_hash_map *hm);
-int    add_error(char *str, t_list *errors);
+int built_in2(t_command command);
+int    print_error(char *str, t_list **errors);
 #endif
