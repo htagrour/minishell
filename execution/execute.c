@@ -108,6 +108,7 @@ int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
 {
     int fd[2];
     pid_t pid;
+    int ret;
     char **args;
     char **envs;
 
@@ -117,32 +118,30 @@ int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
         return (print_error("command not found", NULL));
     if (get_in_fd(*command,last_fd) < 0 ||  get_out_fd(*command ,&fd[1]) < 0)
     {
-        free_array((void**)args);
-        free_array((void**)envs);
         *last_fd = fd[0];
         return (1);
     }
-    if (built_in1(*command,env))
+    if (!next_cmd && !built_in1(*command, env))
+        return (0);
+    envs = hash_to_arr(env);
+    args = list_to_array(command->args);
+    if((pid = fork()) == -1)
+        exit(1);
+    if (!pid)
     {
-        envs = hash_to_arr(env);
-        args = list_to_array(command->args);
-        if((pid = fork()) == -1)
-            exit(1);
-        if (!pid)
-        {
-            dup2(*last_fd, 0);
-            if (next_cmd || command->out_redx)
-                dup2(fd[1], 1);
-            close(fd[0]);
-            if (built_in2(*command))
+        dup2(*last_fd, 0);
+        if (next_cmd || command->out_redx)
+            dup2(fd[1], 1);
+        close(fd[0]);
+        if (built_in1(*command, env) &&  built_in2(args, envs))
                 execve(*args, args, envs);
             exit(0);
-        }
-        wait(NULL);
-        close(fd[1]);
-        free_array((void**)args);
-        free_array((void**)envs);
     }
+    wait(&ret);
+    close(fd[1]);
+    free_array((void**)args);
+    free_array((void**)envs);
     *last_fd = fd[0];
-    return 0;
+ 
+    return ret;
 }

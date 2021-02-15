@@ -119,5 +119,7 @@ int				get_cmd(t_command *command, char *str, t_hash_map *hm)
 		else
 			extract_arg(command, &str, &bag, hm);
 	}
+	if (!command->args)
+		return (-1);
 	return (1);
 }

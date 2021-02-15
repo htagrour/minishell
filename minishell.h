@@ -60,8 +60,7 @@ char	*get_env(char *str, char **ptr, int len, t_hash_map *hm);
 int     execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *hm);
 void   free_command(t_command *command);
 void    print_command(t_command commands ,t_hash_map *env);
-// int     cd(t_command command);
 int built_in1(t_command command, t_hash_map *hm);
-int built_in2(t_command command);
+int built_in2(char **args, char **envs);
 int    print_error(char *str, t_list **errors);
 #endif

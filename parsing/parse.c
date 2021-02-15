@@ -3,13 +3,14 @@
 int process_cmd(char *temp, int *last_fd,int next,t_hash_map *env)
 {
     t_command *command;
-    
+    int ret;
     command = malloc(sizeof(t_command));
     ft_bzero(command, sizeof(t_command));
     if (get_cmd(command, temp, env) < 0)
         return (print_error("PARSE ERROR", NULL));
    // print_command(*command, env);
-    execute_cmd(command, last_fd, next, env);
+    ret = execute_cmd(command, last_fd, next, env);
+    set_value("?", ft_itoa(ret), env);
     free_command(command);
     return (1);
 }

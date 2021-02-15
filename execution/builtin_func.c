@@ -2,7 +2,7 @@
 
 int is_valide_var(char *str)
 {   
-    if (ft_isdigit(*str))
+    if (!ft_isalpha(*str))
         return (0);
     str++;
     while (*str)
@@ -50,8 +50,18 @@ int     export(t_command command, t_hash_map *env)
 {
     char **str;
     t_list *temp;
+    char **envs;
 
     temp = command.args->next;
+    // if (!temp)
+    // {
+    //     envs = hash_to_arr(env);
+    //     while (*envs)
+    //     {
+    //         /
+    //     }
+        
+    // }
     while (temp)
     {
         str = ft_split((char *)temp->content, '=');
@@ -74,34 +84,54 @@ int unset(t_command command, t_hash_map *env)
     {   str = (char*)temp->content;
         if (is_valide_var(str))
             delet_value(str, env);
+        else
+            print_error("not valide identifier", NULL);
         temp = temp->next;
     }
     return (0);
 }
 
-int echo(t_command command)
+int echo(char **args)
 {
-    t_list *temp;
     int flag;
 
     flag = 0;
-    temp = command.args->next;
-    if (!strcmp((char*)temp->content, "-n"))
+    args++;
+    if (*args)
     {
-        temp = temp->next;
-        flag = 1;
-    }
-    while (temp)
-    {
-        ft_putstr_fd((char*)temp->content, STDOUT_FILENO);
-        if ((temp = temp->next))
-            ft_putstr_fd(" ", STDOUT_FILENO);
+        if (!strcmp(*args, "-n"))
+        {
+            args++;
+            flag = 1;
+        }
+        while (*args)
+        {
+            ft_putstr_fd(*args, STDOUT_FILENO);
+            if (*(args + 1))
+                ft_putstr_fd(" ", STDOUT_FILENO);
+            args++;
+        }
     }
     if (!flag)
         ft_putstr_fd("\n", STDOUT_FILENO);
     return (0);
 }
 
+int env(char **args, char **envs)
+{
+    args++;
+    if (!*args)
+    {
+        while(*envs)
+        {
+            ft_putendl_fd(*envs, STDOUT_FILENO);
+            envs++;
+        }
+        return (0);
+    }
+    else
+        return(print_error("env don't accept args", NULL));
+}
 int built_in1(t_command command, t_hash_map *env)
 {
     char *cmd;
@@ -119,15 +149,16 @@ int built_in1(t_command command, t_hash_map *env)
         exit(0);
     return (res);    
 }
-int built_in2(t_command command)
+int built_in2(char **args, char **envs)
 {
     int res;
     char *cmd;
     res = 1;
-    cmd = (char*) command.args->content;
-    if (!strcmp(cmd,"echo"))
-        res = echo(command);
-    if (!strcmp(cmd, "pwd"))
+    if (!strcmp(*args,"echo"))
+        res = echo(args);
+    if (!strcmp(*args, "pwd"))
         res = pwd();
+    if (!strcmp(*args, "env"))
+        res = env(args, envs);
     return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 00:30:20 by htagrour          #+#    #+#             */
-/*   Updated: 2021/02/14 15:22:22 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/02/15 16:28:27 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int		get_word_number(char const *str, char del, int *wn)
 		else
 		{
 			*wn += del_flag;
-			del_flag = 0;
+			del_flag = (*str == ' ' && del_flag) ? del_flag : 0;
 		}
 		adjust_var_bag(&bag, *str);
 		str++;
