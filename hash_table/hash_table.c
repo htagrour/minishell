@@ -104,6 +104,8 @@ int delet_value(const char *key, t_hash_map *hm)
     hash_code = hash(key, hm->size);
     temp = hm->item[hash_code];
     prev = NULL;
+    if (!temp)
+        return (0);
     while(strcmp(key, temp->key) && temp->next)
     {
         prev = temp;
@@ -121,7 +123,7 @@ int delet_value(const char *key, t_hash_map *hm)
         free(temp);
         hm->elem_total -= 1; 
     }
-    return 1;
+    return 0;
 }
 
 int free_hash_map(t_hash_map *hm)

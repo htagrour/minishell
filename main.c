@@ -82,9 +82,9 @@ int main (int argc, char *argv[], char **envs)
     while (i > 0)
     {
         print_shell();
-        i = get_next_line(STDIN_FILENO, &line);
+        i = get_next_line(fd, &line);
         if (line[0])
-            process_line(line, env, &errors);
+            process_line(line, env);
         ft_lstiter(errors, printss);
         ft_lstclear(&errors, &fun);
         free(line);

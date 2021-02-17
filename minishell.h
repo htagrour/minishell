@@ -9,9 +9,8 @@
 #include <dirent.h> 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <errno.h>
 
-#define NOT_VALIDE_IDE "not a valide identifier"
-#define CMD_NOT_FOUND "command not found"
 #define RED "\e[0;31m"
 #define RESET "\e[0m"
 #define BLKHB "\e[0;100m"
@@ -46,7 +45,7 @@ t_list *error;
 int     g_big_comm;
 int     g_small_comm;
 char	**updated_split(char const *str, char del, int *ele_number);
-int     process_line(char *line, t_hash_map *hm, t_list **errors);
+int     process_line(char *line, t_hash_map *hm);
 void	free_array(void **array);
 void    free_command_array(t_command **commands);
 int     execute(t_command *commande, int comm_number);
@@ -61,6 +60,6 @@ int     execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *
 void   free_command(t_command *command);
 void    print_command(t_command commands ,t_hash_map *env);
 int built_in1(t_command command, t_hash_map *hm);
-int built_in2(char **args, char **envs);
-int    print_error(char *str, t_list **errors);
+int built_in2(char **args, t_hash_map *env);
+int    print_error(char *str, int error, t_hash_map *env);
 #endif

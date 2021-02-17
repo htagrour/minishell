@@ -1,7 +1,7 @@
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 
-#define HASH_SIZE 100
+#define HASH_SIZE 120
 
 #include <stdlib.h>
 #include <string.h>

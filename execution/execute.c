@@ -23,7 +23,7 @@ int get_full_path(t_command *command, t_hash_map *hm)
     char *temp1;
     void *temp2;
     struct stat st;
-    int flag = -1;
+    int flag = 127;
     int i = -1;
 
     cmd = (char*)command->args->content;
@@ -113,15 +113,16 @@ int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
     char **envs;
 
     pipe(fd);
-    
-    if (get_full_path(command, env) < 0)
-        return (print_error("command not found", NULL));
     if (get_in_fd(*command,last_fd) < 0 ||  get_out_fd(*command ,&fd[1]) < 0)
     {
         *last_fd = fd[0];
-        return (1);
+        return (print_error("file error", 1, env));
     }
-    if (!next_cmd && !built_in1(*command, env))
+    if (!command->args)
+        return (0);
+    if (get_full_path(command, env))
+        return (print_error("command not found", 127,env));
+    if (!next_cmd && built_in1(*command, env) != -1)
         return (0);
     envs = hash_to_arr(env);
     args = list_to_array(command->args);
@@ -133,15 +134,15 @@ int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
         if (next_cmd || command->out_redx)
             dup2(fd[1], 1);
         close(fd[0]);
-        if (built_in1(*command, env) &&  built_in2(args, envs))
+        if (built_in1(*command, env) &&  built_in2(args, env))
                 execve(*args, args, envs);
-            exit(0);
+        exit(0);
     }
     wait(&ret);
     close(fd[1]);
     free_array((void**)args);
     free_array((void**)envs);
     *last_fd = fd[0];
- 
-    return ret;
+    set_value("$", ft_itoa(ret), env);
+    return 0;
 }

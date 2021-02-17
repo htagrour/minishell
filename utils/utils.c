@@ -17,11 +17,12 @@ char **list_to_array(t_list *list)
     return tab;
 }
 
-int    print_error(char *str, t_list **errors)
+int    print_error(char *str, int error, t_hash_map *env)
 {
     //ft_lstadd_back(errors, ft_lstnew(ft_strdup(str)));
-    ft_putendl_fd(str, 1);
-    return (-1);
+    ft_putendl_fd(str, STDOUT_FILENO);
+    set_value("?", ft_itoa(error), env);
+    return (error);
 }
 
 void free_array(void **array)

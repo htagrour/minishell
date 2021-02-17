@@ -6,7 +6,7 @@
 #    By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/22 16:29:25 by htagrour          #+#    #+#              #
-#    Updated: 2021/02/13 18:19:07 by htagrour         ###   ########.fr        #
+#    Updated: 2021/02/17 18:00:27 by htagrour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ $(NAME):
 	#-Wall -Wextra -Werror
 	ar rc $(NAME) $(OBJECT)
 	ranlib $(NAME)
-	gcc  $(NAME) -fsanitize=address -o minishell -g
+	gcc  $(NAME)  -fsanitize=address -o minishell -g
 	rm -f $(OBJECT) 
 
 clean:
