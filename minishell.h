@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <signal.h>
 
 #define RED "\e[0;31m"
 #define RESET "\e[0m"
@@ -62,4 +63,5 @@ void    print_command(t_command commands ,t_hash_map *env);
 int built_in1(t_command command, t_hash_map *hm);
 int built_in2(char **args, t_hash_map *env);
 int    print_error(char *str, int error, t_hash_map *env);
+void sighandler(int signum);
 #endif

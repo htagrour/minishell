@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 
-
+pid_t pid;
 // i need to learn about muliple processing
 int is_built_in(char *str)
 {
@@ -104,10 +104,13 @@ int get_out_fd(t_command command, int *out_fd)
     return (fd);
 }
 
+void kill_procces(int sig)
+{
+    kill(pid, SIGQUIT);
+}
 int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
 {
     int fd[2];
-    pid_t pid;
     int ret;
     char **args;
     char **envs;
@@ -128,6 +131,7 @@ int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
     args = list_to_array(command->args);
     if((pid = fork()) == -1)
         exit(1);
+    signal(SIGQUIT, kill_procces);
     if (!pid)
     {
         dup2(*last_fd, 0);
@@ -143,6 +147,6 @@ int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
     free_array((void**)args);
     free_array((void**)envs);
     *last_fd = fd[0];
-    set_value("$", ft_itoa(ret), env);
+    set_value("?", ft_itoa(ret), env);
     return 0;
 }
