@@ -84,7 +84,7 @@ int main (int argc, char *argv[], char **envs)
         signal(SIGINT, sighandler);
         // signal(SIGQUIT, );
         i = get_next_line(STDIN_FILENO, &line);
-        WIFEXITED(i)
+        WIFEXITED(i);
         if (line[0])
             process_line(line, env);
         ft_lstiter(errors, printss);

@@ -1,4 +1,5 @@
 ERRORS TO FIX:
 
+- lunch all commands in the same time(recursive)
 -last cmd return
 -signal

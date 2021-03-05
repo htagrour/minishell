@@ -142,11 +142,11 @@ int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
                 execve(*args, args, envs);
         exit(0);
     }
+    *last_fd = fd[0];
     wait(&ret);
     close(fd[1]);
     free_array((void**)args);
     free_array((void**)envs);
-    *last_fd = fd[0];
     set_value("?", ft_itoa(ret), env);
     return 0;
 }
