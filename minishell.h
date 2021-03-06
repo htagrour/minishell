@@ -64,4 +64,5 @@ int built_in1(t_command command, t_hash_map *hm);
 int built_in2(char **args, t_hash_map *env);
 int    print_error(char *str, int error, t_hash_map *env);
 void sighandler(int signum);
+void print_command(t_command command ,t_hash_map *env);
 #endif

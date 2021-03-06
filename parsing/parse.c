@@ -1,16 +1,11 @@
 #include "../minishell.h"
 
-int process_cmd(char *temp, int *last_fd,int next,t_hash_map *env)
+int process_cmd(t_command *command, char *temp,t_hash_map *env)
 {
-    t_command *command;
-    int ret;
-    command = malloc(sizeof(t_command));
     ft_bzero(command, sizeof(t_command));
     if (get_cmd(command, temp, env))
         return (-1);
-    ret = execute_cmd(command, last_fd, next, env);
-    free_command(command);
-    return (ret);
+    return (0);
 }
 
 int process_line(char *line, t_hash_map *env)
@@ -21,6 +16,7 @@ int process_line(char *line, t_hash_map *env)
     int j;
     int last_fd;
     int ret;
+    t_command *command;
 
     i = 0;
     last_fd = 0;
@@ -33,10 +29,14 @@ int process_line(char *line, t_hash_map *env)
         temp2 = updated_split(temp1[i], '|', &g_small_comm);
         if (!temp2)
             return (print_error("syntax error", 258, env));
+        command = malloc(sizeof(t_command)* g_small_comm);
         while (temp2[++j])
-            if (process_cmd(temp2[j], &last_fd,temp2[j + 1] != 0,env) < 0)
+        {
+            if (process_cmd(&command[j],temp2[j], env) < 0)
                 break;
+        }
         free_array((void**)temp2);
+        execute(command, env, g_small_comm);
         i++;
     }
     free_array((void**)temp1);

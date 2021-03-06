@@ -71,6 +71,7 @@ int get_in_fd(t_command command, int *last_fd)
     temp = command.in_redx;
     while (temp)
     {   
+        close(*last_fd);
         red = (t_redx*)temp->content;
         if ((fd = open(red->file,O_RDONLY)) < 0)
             return (-1);
@@ -108,25 +109,26 @@ void kill_procces(int sig)
 {
     kill(pid, SIGQUIT);
 }
-int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
+
+int execute_cmd(t_command command, int *fds,int i, t_hash_map *env)
 {
-    int fd[2];
+    //int fd[2];
     int ret;
     char **args;
     char **envs;
 
-    pipe(fd);
-    if (get_in_fd(*command,last_fd) < 0 ||  get_out_fd(*command ,&fd[1]) < 0)
+   // pipe(fd);
+    if (get_in_fd(&command,last_fd) < 0 ||  get_out_fd(&command ,&fd[1]) < 0)
     {
-        *last_fd = fd[0];
+     //   *last_fd = fd[0];
         return (print_error("file error", 1, env));
     }
     if (!command->args)
         return (0);
     if (get_full_path(command, env))
         return (print_error("command not found", 127,env));
-    if (!next_cmd && built_in1(*command, env) != -1)
-        return (0);
+    //if (!next_cmd && built_in1(*command, env) != -1)
+    //   return (0);
     envs = hash_to_arr(env);
     args = list_to_array(command->args);
     if((pid = fork()) == -1)
@@ -143,10 +145,10 @@ int execute_cmd(t_command *command, int *last_fd, int next_cmd, t_hash_map *env)
         exit(0);
     }
     *last_fd = fd[0];
-    wait(&ret);
     close(fd[1]);
+    //wait(NULL);
     free_array((void**)args);
     free_array((void**)envs);
-    set_value("?", ft_itoa(ret), env);
+    //set_value("?", ft_itoa(ret), env);
     return 0;
 }
