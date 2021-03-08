@@ -39,7 +39,7 @@ void print_shell(void)
 }
 
 void sighandler(int signum) {
-    ft_putchar_fd('\n', STDOUT_FILENO);
+    ft_putstr_fd("\n\r\r", STDOUT_FILENO);
     print_shell();
 }
 
@@ -76,23 +76,17 @@ int main (int argc, char *argv[], char **envs)
     env = init_hash_map(100);
     get_external_env(envs, env);
     int fd = open("test.txt", O_RDONLY);
-    //errors = (t_list*)malloc(sizeof(t_list));
-    ft_bzero(&errors, sizeof(t_list));
     while (i > 0)
     {
         print_shell();
         signal(SIGINT, sighandler);
-        // signal(SIGQUIT, );
         i = get_next_line(STDIN_FILENO, &line);
-        WIFEXITED(i);
+       // WIFEXITED(i)
         if (line[0])
             process_line(line, env);
-        ft_lstiter(errors, printss);
-        ft_lstclear(&errors, &fun);
         free(line);
     }
     free_hash_map(env);
-    free(errors);
 
     return 0;
 }

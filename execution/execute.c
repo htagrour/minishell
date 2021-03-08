@@ -15,7 +15,7 @@ int is_built_in(char *str)
             !strcmp(str, "exit")
             );
 }
-int get_full_path(t_command *command, t_hash_map *hm)
+int get_full_path(t_command *command, t_hash_map *env)
 {
     char *path;
     char **temp;
@@ -29,7 +29,7 @@ int get_full_path(t_command *command, t_hash_map *hm)
     cmd = (char*)command->args->content;
     if (is_built_in(cmd) || (!stat(cmd, &st) && (st.st_mode & S_IXUSR)))
         return (0);
-    path = get_value("PATH", hm);
+    path = get_value("PATH", env);
     if (path[0])
     {
         temp = ft_split(path, ':');
@@ -71,7 +71,6 @@ int get_in_fd(t_command command, int *last_fd)
     temp = command.in_redx;
     while (temp)
     {   
-        close(*last_fd);
         red = (t_redx*)temp->content;
         if ((fd = open(red->file,O_RDONLY)) < 0)
             return (-1);
@@ -109,26 +108,26 @@ void kill_procces(int sig)
 {
     kill(pid, SIGQUIT);
 }
-
-int execute_cmd(t_command command, int *fds,int i, t_hash_map *env)
+int execute_cmd(t_command *command, int last_fd, int i,int total, t_hash_map *env)
 {
-    //int fd[2];
+    int fd[2];
     int ret;
     char **args;
     char **envs;
+    char *temp;
 
-   // pipe(fd);
-    if (get_in_fd(&command,last_fd) < 0 ||  get_out_fd(&command ,&fd[1]) < 0)
+    pipe(fd);
+    if (get_in_fd(*command,&last_fd) < 0 ||  get_out_fd(*command ,&fd[1]) < 0)
     {
-     //   *last_fd = fd[0];
+        last_fd = fd[0];
         return (print_error("file error", 1, env));
     }
     if (!command->args)
         return (0);
     if (get_full_path(command, env))
         return (print_error("command not found", 127,env));
-    //if (!next_cmd && built_in1(*command, env) != -1)
-    //   return (0);
+    // if (!next_cmd && built_in1(*command, env) != -1)
+    //     return (0);
     envs = hash_to_arr(env);
     args = list_to_array(command->args);
     if((pid = fork()) == -1)
@@ -136,19 +135,28 @@ int execute_cmd(t_command command, int *fds,int i, t_hash_map *env)
     signal(SIGQUIT, kill_procces);
     if (!pid)
     {
-        dup2(*last_fd, 0);
-        if (next_cmd || command->out_redx)
+        dup2(last_fd, 0);
+        if ((i < total - 1 ) || command->out_redx)
             dup2(fd[1], 1);
         close(fd[0]);
         if (built_in1(*command, env) &&  built_in2(args, env))
                 execve(*args, args, envs);
-        exit(0);
+        else
+            return 0;
+        exit(1);
     }
-    *last_fd = fd[0];
+    else{
+
+    if (i < total - 1)
+        execute_cmd(command+1, fd[0],++i,total,env);
+    close(fd[0]);
     close(fd[1]);
-    //wait(NULL);
+    wait(&pid);;
     free_array((void**)args);
     free_array((void**)envs);
-    //set_value("?", ft_itoa(ret), env);
+    temp = ft_itoa(ret);
+    set_value("?", temp, env);
+    free(temp);
+    }
     return 0;
 }

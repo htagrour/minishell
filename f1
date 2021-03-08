@@ -1,0 +1,19 @@
+total 468
+-rwxrwxr-x 1 htagrour htagrour  16960 مارس    7 23:06 a.out
+drwxrwxr-x 2 htagrour htagrour   4096 مارس    7 23:06 execution
+-rw-rw-r-- 1 htagrour htagrour      0 مارس    8 01:31 f1
+-rw-r--r-- 1 htagrour htagrour   5047 مارس    8 01:10 file
+drwxrwxr-x 2 htagrour htagrour   4096 مارس    7 23:06 get_line
+drwxrwxr-x 2 htagrour htagrour   4096 مارس    7 23:06 hash_table
+drwxrwxr-x 2 htagrour htagrour   4096 مارس    7 23:06 library
+-rw-rw-r-- 1 htagrour htagrour   1756 مارس    8 01:28 main.c
+-rw-rw-r-- 1 htagrour htagrour   1293 مارس    8 01:21 Makefile
+-rwxrwxr-x 1 htagrour htagrour  88712 مارس    8 01:28 minishell
+-rw-rw-r-- 1 htagrour htagrour 305706 مارس    8 01:28 minishell.a
+-rw-rw-r-- 1 htagrour htagrour   1819 مارس    8 00:26 minishell.h
+drwxrwxr-x 2 htagrour htagrour   4096 مارس    7 23:06 parsing
+-rw-rw-r-- 1 htagrour htagrour    597 مارس    7 23:06 test.c
+drwxrwxr-x 2 htagrour htagrour   4096 مارس    7 23:06 tests
+-rw-rw-r-- 1 htagrour htagrour      3 مارس    8 01:27 test.txt
+-rw-rw-r-- 1 htagrour htagrour     47 مارس    7 23:06 todo
+drwxrwxr-x 2 htagrour htagrour   4096 مارس    7 23:06 utils

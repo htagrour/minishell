@@ -19,9 +19,12 @@ char **list_to_array(t_list *list)
 
 int    print_error(char *str, int error, t_hash_map *env)
 {
+    char *temp;
     //ft_lstadd_back(errors, ft_lstnew(ft_strdup(str)));
+    temp = ft_itoa(error);
     ft_putendl_fd(str, STDOUT_FILENO);
-    set_value("?", ft_itoa(error), env);
+    set_value("?", temp, env);
+    free(temp);
     return (error);
 }
 
@@ -52,26 +55,17 @@ void free_command(t_command *command)
     if (command->out_redx)
         ft_lstclear(&(command->out_redx), &free_struct_file);
     ft_lstclear(&(command->args), &free);
-    free(command);
 }
 
-void free_command_array(t_command **commands)
+void free_command_array(t_command *commands)
 {
     int i;
-    int j;
     
     i = 0;
-    while (i < g_big_comm)
-    {   
-        g_small_comm = commands[i][0].test;
-        j = 0;
-        while(j < g_small_comm)
-        {
-            free_command(&((commands)[i][j]));
-            j++;
-        }
-        //free(commands[i]);
+    while(i < g_small_comm)
+    {
+        free_command(&commands[i]);
         i++;
     }
-    free(commands);
+   free(commands);
 }

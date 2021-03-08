@@ -104,6 +104,7 @@ int				get_cmd(t_command *command, char *str, t_hash_map *env)
 	int			i;
 
 	ft_bzero(&bag, sizeof(bag));
+	ft_bzero(command, sizeof(t_command));
 	while (*str)
 	{
 		while (*str == ' ')
@@ -114,7 +115,7 @@ int				get_cmd(t_command *command, char *str, t_hash_map *env)
 		if (is_red(*str) && !bag.slash_flag)
 		{
 			if (extract_file(command, &str, &bag, env) < 0)
-				return (print_error("syntax error near unexpected token newline", 258, env));
+				return (print_error("syntax error", 258, env));
 		}
 		else
 			extract_arg(command, &str, &bag, env);

@@ -1,5 +1,5 @@
 ERRORS TO FIX:
 
-- launch all commands in the same time(recursive)
 -last cmd return
 -signal
+- cmd|

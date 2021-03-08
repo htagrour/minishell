@@ -64,6 +64,15 @@ int     export(t_command command, t_hash_map *env)
     char **envs;
 
     temp = command.args->next;
+    // if (!temp)
+    // {
+    //     envs = hash_to_arr(env);
+    //     while (*envs)
+    //     {
+    //         /
+    //     }
+        
+    // }
     while (temp)
     {
         str = ft_split((char *)temp->content, '=');
@@ -132,7 +141,7 @@ int env(char **args, t_hash_map *env)
             ft_putendl_fd(*envs, STDOUT_FILENO);
             envs++;
         }
-       // free_array((void**)envs);
+        free_array((void**)envs);
         return (0);
     }
     else
