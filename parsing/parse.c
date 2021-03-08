@@ -38,9 +38,9 @@ int process_line(char *line, t_hash_map *env)
         while (temp2[++j])
             if (get_cmd(&commands[j],temp2[j],env))
                 break;
-        execute_cmd(commands, 0, 0, j, env);
+         execute_cmd(commands, 0, 0, j, env);
         free_array((void**)temp2);
-        //free_command_array(commands);
+        free_command_array(commands);
         i++;
     }
     free_array((void**)temp1);

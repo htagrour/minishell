@@ -6,7 +6,7 @@
 /*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 00:30:20 by htagrour          #+#    #+#             */
-/*   Updated: 2021/02/15 16:28:27 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/08 18:34:31 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,26 @@ static int		get_word_number(char const *str, char del, int *wn)
 	del_flag = 1;
 	while (*str)
 	{
-		if (*str == del && !bag.brack_flag && !bag.slash_flag)
+		while(*str == ' ' && !bag.brack_flag)
+			str++;
+		if (*str)
 		{
-			if (del_flag)
-				return (-1);
-			del_flag = 1;
+			if (*str == del && !bag.brack_flag && !bag.slash_flag)
+			{
+				if (del_flag)
+					return (-1);
+				del_flag = 1;
+			}
+			else
+			{
+				*wn += del_flag;
+				del_flag = 0;
+			}
+			adjust_var_bag(&bag, *str);
+			str++;
 		}
-		else
-		{
-			*wn += del_flag;
-			del_flag = (*str == ' ' && del_flag) ? del_flag : 0;
-		}
-		adjust_var_bag(&bag, *str);
-		str++;
 	}
-	if (bag.brack_flag)
+	if (bag.brack_flag || (del_flag && del == '|'))
 		return (-1);
 	return (*wn);
 }

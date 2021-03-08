@@ -108,6 +108,7 @@ void kill_procces(int sig)
 {
     kill(pid, SIGQUIT);
 }
+
 int execute_cmd(t_command *command, int last_fd, int i,int total, t_hash_map *env)
 {
     int fd[2];
@@ -126,37 +127,36 @@ int execute_cmd(t_command *command, int last_fd, int i,int total, t_hash_map *en
         return (0);
     if (get_full_path(command, env))
         return (print_error("command not found", 127,env));
-    // if (!next_cmd && built_in1(*command, env) != -1)
-    //     return (0);
+    if (!(i < total - 1) && built_in1(*command, env) != -1)
+        return (0);
     envs = hash_to_arr(env);
     args = list_to_array(command->args);
     if((pid = fork()) == -1)
         exit(1);
-    signal(SIGQUIT, kill_procces);
     if (!pid)
     {
         dup2(last_fd, 0);
+        if (last_fd != 0)
+            close(last_fd);
         if ((i < total - 1 ) || command->out_redx)
             dup2(fd[1], 1);
         close(fd[0]);
+        close(fd[1]);
         if (built_in1(*command, env) &&  built_in2(args, env))
                 execve(*args, args, envs);
         else
             return 0;
         exit(1);
     }
-    else{
-
+    close(fd[1]);
     if (i < total - 1)
         execute_cmd(command+1, fd[0],++i,total,env);
     close(fd[0]);
-    close(fd[1]);
     wait(&pid);;
     free_array((void**)args);
     free_array((void**)envs);
     temp = ft_itoa(ret);
     set_value("?", temp, env);
     free(temp);
-    }
     return 0;
 }

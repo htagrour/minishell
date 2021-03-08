@@ -11,7 +11,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <signal.h>
-#include <wait.h>
+//#include <wait.h>
 #define RED "\e[0;31m"
 #define RESET "\e[0m"
 #define BLKHB "\e[0;100m"
@@ -57,7 +57,7 @@ int     belong(char *str, char c);
 int     is_red(char c);
 int     conditions(char c, t_var_bag bag, char n);
 char	*get_env(char *str, char **ptr, int len, t_hash_map *hm);
-int execute_cmd(t_command *command, int last_fd, int i,int total, t_hash_map *env);
+int     execute_cmd(t_command *command, int last_fd, int i,int total, t_hash_map *env);
 void   free_command(t_command *command);
 void    print_command(t_command commands ,t_hash_map *env);
 int built_in1(t_command command, t_hash_map *hm);

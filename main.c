@@ -80,7 +80,7 @@ int main (int argc, char *argv[], char **envs)
     {
         print_shell();
         signal(SIGINT, sighandler);
-        i = get_next_line(STDIN_FILENO, &line);
+        i = get_next_line(fd, &line);
        // WIFEXITED(i)
         if (line[0])
             process_line(line, env);
