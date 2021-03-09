@@ -1,5 +1,4 @@
-ERRORS TO FIX:
-
--last cmd return
--signal
-- cmd|
+TODO:
+    - get last cmd return
+    - fix signals (ctr+\)
+    - norminette

@@ -1,7 +1,6 @@
 #include "../minishell.h"
 
 
-pid_t pid;
 // i need to learn about muliple processing
 int is_built_in(char *str)
 {
@@ -15,24 +14,24 @@ int is_built_in(char *str)
             !strcmp(str, "exit")
             );
 }
-int get_full_path(t_command *command, t_hash_map *env)
+
+char *get_bin(t_command command, struct stat st,t_hash_map *env)
 {
-    char *path;
-    char **temp;
     char *cmd;
     char *temp1;
-    void *temp2;
-    struct stat st;
-    int flag = 127;
-    int i = -1;
+    char **temp;
+    char *path;
+    int     i;
 
-    cmd = (char*)command->args->content;
+    cmd = (char*)command.args->content;
     if (is_built_in(cmd) || (!stat(cmd, &st) && (st.st_mode & S_IXUSR)))
         return (0);
     path = get_value("PATH", env);
     if (path[0])
     {
         temp = ft_split(path, ':');
+        free(path);
+        i = -1;
         while (temp[++i])
         {
             temp1 = temp[i];
@@ -40,23 +39,28 @@ int get_full_path(t_command *command, t_hash_map *env)
             free(temp1);
             temp1 = ft_strjoin(temp[i], cmd);
             if (!stat(temp1, &st) && (st.st_mode & S_IXUSR))
-            {
-                flag = 0;
-                break;
-            }
+                return (temp1);
             free(temp1);
         }
         free_array((void**)temp);
     }
-    if (!flag)
-    {
-        temp2 = command->args->content;
-        command->args->content = (void*)ft_strdup(temp1);
-        free(temp2);
-        free(temp1);
-    }
-    free(path);
-    return (flag);
+    return (NULL);
+}
+
+int get_full_path(t_command *command, t_hash_map *env)
+{
+    char *temp1;
+    struct stat st;
+    char *bin;
+
+    if (!command->args)
+        return (1);
+    if (!(bin = get_bin(*command, st,env)))
+        return (127);
+    free(command->args->content);
+    command->args->content = (void*)ft_strdup(bin);
+    free(bin);
+    return (0);
 }
 
 int get_in_fd(t_command command, int *last_fd)
@@ -77,7 +81,7 @@ int get_in_fd(t_command command, int *last_fd)
         temp = temp->next;
     }
     *last_fd = fd;
-    return (fd);
+    return (0);
 }
 
 int get_out_fd(t_command command, int *out_fd)
@@ -101,62 +105,59 @@ int get_out_fd(t_command command, int *out_fd)
         temp = temp->next;
     }
     *out_fd = fd; 
-    return (fd);
+    return (0);
 }
 
-void kill_procces(int sig)
+int start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
 {
-    kill(pid, SIGQUIT);
-}
-
-int execute_cmd(t_command *command, int last_fd, int i,int total, t_hash_map *env)
-{
-    int fd[2];
-    int ret;
-    char **args;
     char **envs;
-    char *temp;
+    char **args;
+    pid_t pid;
 
-    pipe(fd);
-    if (get_in_fd(*command,&last_fd) < 0 ||  get_out_fd(*command ,&fd[1]) < 0)
-    {
-        last_fd = fd[0];
-        return (print_error("file error", 1, env));
-    }
-    if (!command->args)
-        return (0);
-    if (get_full_path(command, env))
-        return (print_error("command not found", 127,env));
-    if (!(i < total - 1) && built_in1(*command, env) != -1)
-        return (0);
-    envs = hash_to_arr(env);
-    args = list_to_array(command->args);
     if((pid = fork()) == -1)
         exit(1);
     if (!pid)
     {
+        if (get_full_path(&command, env))
+            exit(print_error("command not found", 127,env));
         dup2(last_fd, 0);
         if (last_fd != 0)
             close(last_fd);
-        if ((i < total - 1 ) || command->out_redx)
-            dup2(fd[1], 1);
-        close(fd[0]);
-        close(fd[1]);
-        if (built_in1(*command, env) &&  built_in2(args, env))
+        if (command.next || command.out_redx)
+            dup2(fds[1], 1);
+        close(fds[0]);
+        close(fds[1]);
+        envs = hash_to_arr(env);
+        args = list_to_array(command.args);
+        if (built_in1(command, env) &&  built_in2(args, env))
                 execve(*args, args, envs);
         else
-            return 0;
+            exit(0);
         exit(1);
     }
-    close(fd[1]);
-    if (i < total - 1)
-        execute_cmd(command+1, fd[0],++i,total,env);
-    close(fd[0]);
-    wait(&pid);;
-    free_array((void**)args);
-    free_array((void**)envs);
-    temp = ft_itoa(ret);
-    set_value("?", temp, env);
-    free(temp);
-    return 0;
+    close(fds[1]);
+}
+
+int execute_commands(t_command *commands, int last_fd,int total, t_hash_map *env)
+{
+    int fds[2];
+    char **args;
+    char **envs;
+    char *temp;
+    int ret;
+
+    pipe(fds);
+    if (!get_in_fd(*commands,&last_fd) ||  !get_out_fd(*commands ,&fds[1]))
+    {
+        if ((total == 1) && built_in1(*commands, env) != -1)
+            return (0);
+        start_process(*commands, last_fd,fds, env);
+        if (commands->next)
+            ret = execute_commands(commands+1, fds[0],total,env);
+        close(fds[0]);
+        wait(NULL);
+        return (ret);
+    }
+    else
+        print_error("file error", 1, env);
 }

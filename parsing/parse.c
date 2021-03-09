@@ -1,47 +1,50 @@
 #include "../minishell.h"
 
-// int process_cmd(char *temp, int *last_fd,int next,t_hash_map *env)
-// {
-//     t_command *command;
-//     int ret;
-//     command = malloc(sizeof(t_command));
-//     ft_bzero(command, sizeof(t_command));
-//     if (get_cmd(command, temp, env))
-//         return (-1);
-//     ret = execute_cmd(command, last_fd, next, env);
-//     free_command(command);
-//     return (ret);
-// }
+t_command *get_commands(char **temp, int total, t_hash_map *env)
+{
+    t_command *commands;
+    int         i;
 
-// int run_pipe()
+    commands = (t_command*) malloc(sizeof(t_command) * (total));
+    if (!commands)
+        return (NULL);
+    i = -1;
+    while (temp[++i])
+    {
+        if (get_cmd(&commands[i], temp[i], env))
+        {
+            free_array((void**)temp);
+            free_command_array(commands, total);
+            return (NULL);
+        }
+        commands[i].next = (temp[i+1] != NULL);
+        free(temp[i]);
+    }
+    free(temp);
+    return (commands);
+}
+
 int process_line(char *line, t_hash_map *env)
 {
-    int i;
+    t_command *commands;
     char **temp1;
     char **temp2;
-    int j;
-    int last_fd;
-    int ret;
-    t_command *commands;
+    int i;
+    int total;
     
-    i = 0;
-    temp1 = updated_split(line, ';', &g_big_comm);
+    temp1 = updated_split(line, ';', &i);
     if (!temp1)
         return (print_error("syntax error", 258, env));
-    while (temp1[i])
+    i = -1;
+    while (temp1[++i])
     {
-        j = -1;
-        temp2 = updated_split(temp1[i], '|', &g_small_comm);
+        temp2 = updated_split(temp1[i], '|', &total);
         if (!temp2)
             return (print_error("syntax error", 258, env));
-        commands = (t_command*)malloc(sizeof(t_command) * g_small_comm);
-        while (temp2[++j])
-            if (get_cmd(&commands[j],temp2[j],env))
-                break;
-         execute_cmd(commands, 0, 0, j, env);
-        free_array((void**)temp2);
-        free_command_array(commands);
-        i++;
+        if (!(commands = get_commands(temp2, total, env)))
+            return (free_array((void**)temp1));
+       int ret= execute_commands(commands, 0, total, env);
+        free_command_array(commands, total);
     }
     free_array((void**)temp1);
     return 0;
