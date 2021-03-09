@@ -11,7 +11,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <signal.h>
-#include <wait.h>
+//#include <wait.h>
 #define RED "\e[0;31m"
 #define RESET "\e[0m"
 #define BLKHB "\e[0;100m"

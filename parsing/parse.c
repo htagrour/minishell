@@ -43,7 +43,7 @@ int process_line(char *line, t_hash_map *env)
             return (print_error("syntax error", 258, env));
         if (!(commands = get_commands(temp2, total, env)))
             return (free_array((void**)temp1));
-       int ret= execute_commands(commands, 0, total, env);
+        execute_commands(commands, 0, total, env);
         free_command_array(commands, total);
     }
     free_array((void**)temp1);

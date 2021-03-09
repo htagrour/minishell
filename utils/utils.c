@@ -24,6 +24,7 @@ int    print_error(char *str, int error, t_hash_map *env)
     ft_putendl_fd(str, STDOUT_FILENO);
     set_value("?", temp, env);
     free(temp);
+    errno = error;
     return (error);
 }
 

@@ -25,7 +25,7 @@ char *get_bin(t_command command, struct stat st,t_hash_map *env)
 
     cmd = (char*)command.args->content;
     if (is_built_in(cmd) || (!stat(cmd, &st) && (st.st_mode & S_IXUSR)))
-        return (0);
+        return (ft_strdup(cmd));
     path = get_value("PATH", env);
     if (path[0])
     {
@@ -108,7 +108,7 @@ int get_out_fd(t_command command, int *out_fd)
     return (0);
 }
 
-int start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
+void start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
 {
     char **envs;
     char **args;
@@ -132,8 +132,8 @@ int start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
         if (built_in1(command, env) &&  built_in2(args, env))
                 execve(*args, args, envs);
         else
-            exit(0);
-        exit(1);
+            exit(EXIT_SUCCESS);
+        exit(EXIT_FAILURE);
     }
     close(fds[1]);
 }
@@ -155,9 +155,14 @@ int execute_commands(t_command *commands, int last_fd,int total, t_hash_map *env
         if (commands->next)
             ret = execute_commands(commands+1, fds[0],total,env);
         close(fds[0]);
-        wait(NULL);
-        return (ret);
+        wait(&ret);
+        if ((commands->next && total != 1) || !commands->next)
+        {
+            if (WIFEXITED(ret))
+                set_value("?", ft_itoa(WEXITSTATUS(ret)), env);
+        }
+        return (0);
     }
     else
-        print_error("file error", 1, env);
+        return (print_error("file error", 1, env));
 }
