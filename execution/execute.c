@@ -15,6 +15,14 @@ int is_built_in(char *str)
             );
 }
 
+void add_return(t_hash_map *env, int ret)
+{
+    char *temp;
+
+    temp = ft_itoa(ret);
+    set_value("?",temp, env);
+    free(temp);
+}
 char *get_bin(t_command command, struct stat st,t_hash_map *env)
 {
     char *cmd;
@@ -118,6 +126,8 @@ void start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
         exit(1);
     if (!pid)
     {
+        if (get_in_fd(command, &last_fd)|| get_out_fd(command, &fds[1]))
+            exit(print_error("FIle ERROR", 1,env));
         if (get_full_path(&command, env))
             exit(print_error("command not found", 127,env));
         dup2(last_fd, 0);
@@ -146,23 +156,18 @@ int execute_commands(t_command *commands, int last_fd,int total, t_hash_map *env
     char *temp;
     int ret;
 
-    pipe(fds);
-    if (!get_in_fd(*commands,&last_fd) ||  !get_out_fd(*commands ,&fds[1]))
-    {
-        if ((total == 1) && built_in1(*commands, env) != -1)
-            return (0);
-        start_process(*commands, last_fd,fds, env);
-        if (commands->next)
-            ret = execute_commands(commands+1, fds[0],total,env);
-        close(fds[0]);
-        wait(&ret);
-        if ((commands->next && total != 1) || !commands->next)
-        {
-            if (WIFEXITED(ret))
-                set_value("?", ft_itoa(WEXITSTATUS(ret)), env);
-        }
+    if ((total == 1) && built_in1(*commands, env) != -1)
         return (0);
+    pipe(fds);
+    start_process(*commands, last_fd,fds, env);
+    if (commands->next)
+        ret = execute_commands(commands+1, fds[0],total,env);
+    close(fds[0]);
+    wait(&ret);
+    if ((commands->next && total != 1) || !commands->next)
+    {
+        if (WIFEXITED(ret))
+            add_return(env,WEXITSTATUS(ret));
     }
-    else
-        return (print_error("file error", 1, env));
+    return (0);
 }

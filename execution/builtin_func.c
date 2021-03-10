@@ -161,6 +161,7 @@ int exit_(t_command cmd, t_hash_map *env)
     exit(ft_atoi((char*)temp->content));
     return (0);
 }
+
 int built_in1(t_command command, t_hash_map *env)
 {
     char *cmd;
