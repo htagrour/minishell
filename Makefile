@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+         #
+#    By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/22 16:29:25 by htagrour          #+#    #+#              #
-#    Updated: 2021/03/08 18:05:00 by htagrour         ###   ########.fr        #
+#    Updated: 2021/03/11 11:14:14 by fsarbout         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,16 +26,16 @@ all: $(NAME)
 
 $(NAME):
 
-	gcc -c $(SRC)  -D BUFFER_SIZE=10 -g
-	#-Wall -Wextra -Werror
-	ar rc $(NAME) $(OBJECT)
-	ranlib $(NAME)
-	gcc  $(NAME) -fsanitize=address -o minishell -g
-	rm -f $(OBJECT) 
+	@gcc -c $(SRC)  -D BUFFER_SIZE=10 -g
+	@#-Wall -Wextra -Werror
+	@ar rc $(NAME) $(OBJECT)
+	@ranlib $(NAME)
+	@gcc  $(NAME) -fsanitize=address -o minishell -g
+	@rm -f $(OBJECT) 
 
 clean:
-	rm -f $(OBJECT) 
+	@rm -f $(OBJECT) 
 fclean: clean
-	rm -f $(NAME)
-	rm -f minishell
+	@rm -f $(NAME)
+	@rm -f minishell
 re: fclean all
