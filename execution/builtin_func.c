@@ -132,15 +132,14 @@ int env(char **args, t_hash_map *env)
 {
     args++;
     char **envs;
+    int i;
 
     if (!*args)
     {
         envs = hash_to_arr(env);
-        while(*envs)
-        {
-            ft_putendl_fd(*envs, STDOUT_FILENO);
-            envs++;
-        }
+	i = -1;
+        while(envs[++i])
+            ft_putendl_fd(envs[i], STDOUT_FILENO);
         free_array((void**)envs);
         return (0);
     }
