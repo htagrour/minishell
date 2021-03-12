@@ -6,7 +6,7 @@
 #    By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/22 16:29:25 by htagrour          #+#    #+#              #
-#    Updated: 2021/03/11 11:14:14 by fsarbout         ###   ########.fr        #
+#    Updated: 2021/03/12 10:40:07 by fsarbout         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ $(NAME):
 	@#-Wall -Wextra -Werror
 	@ar rc $(NAME) $(OBJECT)
 	@ranlib $(NAME)
-	@gcc  $(NAME) -fsanitize=address -o minishell -g
+	@gcc  $(NAME) -g -fsanitize=address -o minishell -g
 	@rm -f $(OBJECT) 
 
 clean:

@@ -111,7 +111,7 @@ int echo(char **args)
     args++;
     if (*args)
     {
-        echo_check_n(*args, &flag);      
+        echo_check_n(args, &flag);      
         if (flag)
             args += flag;
         while (*args)
@@ -122,7 +122,7 @@ int echo(char **args)
             args++;
         }
     }
-    if (flag != 1)
+    if (!flag)
         ft_putstr_fd("\n", STDOUT_FILENO);
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 00:02:53 by fsarbout          #+#    #+#             */
-/*   Updated: 2021/03/12 03:12:03 by fsarbout         ###   ########.fr       */
+/*   Updated: 2021/03/12 12:12:24 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #define EXECUTION_H
 
 int	    ft_strchr_n(const char *s, int c);
-void	echo_check_n(char *args, int *flag);
-// int		lenght(char **str);
+int		lenght(char **str);
+void	echo_check_n(char **args, int *flag);
 
 
 #endif
