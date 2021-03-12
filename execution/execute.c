@@ -164,6 +164,7 @@ int execute_commands(t_command *commands, int last_fd,int total, t_hash_map *env
         ret = execute_commands(commands+1, fds[0],total,env);
     close(fds[0]);
     wait(&ret);
+    
     if ((commands->next && total != 1) || !commands->next)
     {
         if (WIFEXITED(ret))

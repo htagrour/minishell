@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/15 22:05:51 by htagrour          #+#    #+#             */
-/*   Updated: 2021/03/11 23:48:33 by fsarbout         ###   ########.fr       */
+/*   Created: 2021/03/12 00:02:53 by fsarbout          #+#    #+#             */
+/*   Updated: 2021/03/12 03:12:03 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strchr(const char *s, int c)
-{
-	int i;
+#ifndef EXECUTION_H
+#define EXECUTION_H
 
-	i = 0;
-	while (s[i] != (char)c)
-	{
-		if (!s[i])
-			return (0);
-		i++;
-	}
-	return ((char*)&s[i]);
-}
+int	    ft_strchr_n(const char *s, int c);
+void	echo_check_n(char *args, int *flag);
+// int		lenght(char **str);
+
+
+#endif

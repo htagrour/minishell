@@ -1,4 +1,5 @@
 #include "../minishell.h"
+#include "execution.h"
 
 int is_valide_var(char *str)
 {   
@@ -105,16 +106,14 @@ int unset(t_command command, t_hash_map *env)
 int echo(char **args)
 {
     int flag;
-
+   
     flag = 0;
     args++;
     if (*args)
     {
-        if (!strcmp(*args, "-n"))
-        {
-            args++;
-            flag = 1;
-        }
+        echo_check_n(*args, &flag);      
+        if (flag)
+            args += flag;
         while (*args)
         {
             ft_putstr_fd(*args, STDOUT_FILENO);
@@ -123,7 +122,7 @@ int echo(char **args)
             args++;
         }
     }
-    if (!flag)
+    if (flag != 1)
         ft_putstr_fd("\n", STDOUT_FILENO);
     return (0);
 }
