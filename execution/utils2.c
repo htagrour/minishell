@@ -6,7 +6,7 @@
 /*   By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 22:20:35 by fsarbout          #+#    #+#             */
-/*   Updated: 2021/03/12 15:31:38 by fsarbout         ###   ########.fr       */
+/*   Updated: 2021/03/12 23:46:58 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,14 @@
     
 int	ft_strchr_n(const char *s, int c)
 {
-	int j = 1;
+	int j = 2;
+    int k = ft_strlen(s);
 	
 	while (s[j])
 	{
+        printf("%s\n" , s);
+        printf("%c\n" , s[j]);
+        
         if (s[j] != (char)c)
             return (1);
 		j++;
@@ -29,12 +33,15 @@ int	ft_strchr_n(const char *s, int c)
 void	echo_check_n(char **args, int *flag)
 { 
     int i = lenght(args);
+
     while (i > 0)
     {
 	    if (!strncmp(*args, "-n", 2))
         {
             if (!ft_strchr_n(*args, 'n'))
                 *flag += 1;
+            else
+                break;
         }
         else
             break;
