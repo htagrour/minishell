@@ -44,7 +44,20 @@ t_listo *new_item(const char *key, const char *value)
     return (item);
 }
 
-int set_value(const char *key, const char *value, t_hash_map *hm)
+void add_new_key(const char *key, const char *value, t_hash_map *hm, int alone)
+{
+    t_listo *item;
+
+
+    item = new_item(key, value);
+    if (!alone)
+        item->next = hm->item[hash(key,hm->size)];
+    hm->item[hash(key,hm->size)] = item;
+    hm->elem_total += 1;
+
+}
+
+void set_value(const char *key, const char *value, t_hash_map *hm)
 {
     t_listo *temp;
     t_listo *item;
@@ -59,23 +72,15 @@ int set_value(const char *key, const char *value, t_hash_map *hm)
             temp = temp->next;
         }
         if (!temp)
-        {
-            item = new_item(key, value);
-            item->next = hm->item[hash(key,hm->size)];
-            hm->item[hash(key,hm->size)] = item;
-            hm->elem_total += 1;
-        }else
-        {
-            free(temp->value);
-            temp->value = strdup(value);
-        }
-    }else
-    {
-        item = new_item(key, value);
-        hm->item[hash(key,hm->size)] = item;
-        hm->elem_total += 1;
-    } 
-    return 1;
+            add_new_key(key, value, hm,0);
+        else
+            {
+                free(temp->value);
+                temp->value = strdup(value);
+            }
+    }
+    else
+        add_new_key(key, value, hm, 1);
 }
 
 char *get_value(const char *key, t_hash_map *hm)
@@ -95,7 +100,8 @@ char *get_value(const char *key, t_hash_map *hm)
         value = strdup(temp->value);
     return (value);
 }
-int delet_value(const char *key, t_hash_map *hm)
+
+void delet_value(const char *key, t_hash_map *hm)
 {
     t_listo *temp;
     t_listo *prev;
@@ -105,13 +111,12 @@ int delet_value(const char *key, t_hash_map *hm)
     temp = hm->item[hash_code];
     prev = NULL;
     if (!temp)
-        return (0);
+        return ;
     while(strcmp(key, temp->key) && temp->next)
     {
         prev = temp;
         temp = temp->next;
     }
-
     if (!strcmp(key, temp->key))
     {
         if (prev)
@@ -123,7 +128,6 @@ int delet_value(const char *key, t_hash_map *hm)
         free(temp);
         hm->elem_total -= 1; 
     }
-    return 0;
 }
 
 int free_hash_map(t_hash_map *hm)

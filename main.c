@@ -35,7 +35,7 @@ void print_shell(void)
 {
     ft_putstr_fd("\33[2K", STDOUT_FILENO);
     ft_putstr_fd(BGRN, STDOUT_FILENO);
-    ft_putstr_fd("\rmy_shell>", STDOUT_FILENO);
+    ft_putstr_fd("\rmy_shell😎>", STDOUT_FILENO);
     ft_putstr_fd(RESET, STDOUT_FILENO);
 }
 

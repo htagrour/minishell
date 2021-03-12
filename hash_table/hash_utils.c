@@ -1,13 +1,15 @@
 #include "hash_table.h"
+
 char **hash_to_arr(t_hash_map *hm)
 {
     char **tab;
     t_listo *temp;
     int i;
+    int size;
     char *temp1;
 
     i = 0;
-    int size = hm->size;
+    size = hm->size;
     tab = malloc(sizeof(char*) * (hm->elem_total + 1));
     if (!tab)
         return (NULL);
@@ -20,8 +22,7 @@ char **hash_to_arr(t_hash_map *hm)
             tab[i++] = ft_strjoin(temp1, temp->value);
             free(temp1);
             temp = temp->next;
-        }
-        
+        } 
     }
     tab[i] = NULL;
     return tab;
