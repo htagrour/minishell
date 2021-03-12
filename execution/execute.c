@@ -116,7 +116,9 @@ int get_out_fd(t_command command, int *out_fd)
     return (0);
 }
 
-void start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
+
+
+int start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
 {
     char **envs;
     char **args;
@@ -126,6 +128,9 @@ void start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
         exit(1);
     if (!pid)
     {
+        signal(SIGINT, SIG_DFL);
+        // signal(SIGHUP, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
         if (get_in_fd(command, &last_fd)|| get_out_fd(command, &fds[1]))
             exit(print_error("FIle ERROR", 1,env));
         if (get_full_path(&command, env))
@@ -146,6 +151,7 @@ void start_process(t_command command, int last_fd, int fds[], t_hash_map *env)
         exit(EXIT_FAILURE);
     }
     close(fds[1]);
+    return (pid);
 }
 
 int execute_commands(t_command *commands, int last_fd,int total, t_hash_map *env)
@@ -159,12 +165,17 @@ int execute_commands(t_command *commands, int last_fd,int total, t_hash_map *env
     if ((total == 1) && built_in1(*commands, env) != -1)
         return (0);
     pipe(fds);
-    start_process(*commands, last_fd,fds, env);
+    int pid = start_process(*commands, last_fd,fds, env);
     if (commands->next)
         ret = execute_commands(commands+1, fds[0],total,env);
     close(fds[0]);
-    wait(&ret);
-    if ((commands->next && total != 1) || !commands->next)
+    waitpid(pid,&ret, 0);
+    if (WIFSIGNALED(ret))
+        {
+            add_return(env, WTERMSIG(ret) + 128);
+            return(0);
+        }
+    if (!commands->next)
     {
         if (WIFEXITED(ret))
             add_return(env,WEXITSTATUS(ret));

@@ -33,14 +33,29 @@ void print_command(t_command commands ,t_hash_map *env)
 
 void print_shell(void)
 {
+    ft_putstr_fd("\33[2K", STDOUT_FILENO);
     ft_putstr_fd(BGRN, STDOUT_FILENO);
-    ft_putstr_fd("my_shell>", STDOUT_FILENO);
+    ft_putstr_fd("\rmy_shell>", STDOUT_FILENO);
     ft_putstr_fd(RESET, STDOUT_FILENO);
 }
 
-void sighandler(int signum) {
-    ft_putstr_fd("\n\r\r", STDOUT_FILENO);
+void  INThandler(int sig)
+{
+  if (!getpid())
+  {
+      exit(130);
+}
+    // print_shell();
+    if (sig == SIGINT)
+        ft_putstr_fd("\n",STDOUT_FILENO);
     print_shell();
+}
+
+void ignore_signals()
+{
+    
+        signal(SIGINT, INThandler);
+        signal(SIGQUIT, INThandler);
 }
 
 void fun(void *str)
@@ -76,10 +91,10 @@ int main (int argc, char *argv[], char **envs)
     env = init_hash_map(100);
     get_external_env(envs, env);
     int fd = open("test.txt", O_RDONLY);
+    ignore_signals();
     while (i > 0)
     {
         print_shell();
-        signal(SIGINT, sighandler);
         i = get_next_line(STDIN_FILENO, &line);
         if (line[0])
             process_line(line, env);
