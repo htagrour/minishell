@@ -1,38 +1,39 @@
 #include "includes/minishell.h"
 
 
-// void prints(void *str)
-// {
-//     printf("%s|\n", ((t_redx*)str)->file);
-// }
+void prints(void *str)
+{
+    printf("%s|\n", ((t_redx*)str)->file);
+}
 
-// void printss(void *str)
-// {
-//     printf("%s\n", (char*)str);
-// }
-// void print_array(char **tab)
-// {
-//     while (*tab)
-//     {
-//         printf("%s\n", *tab);
-//         tab++;
-//     }
+void printss(void *str)
+{
+    printf("%s\n", (char*)str);
+}
+void print_array(char **tab)
+{
+    while (*tab)
+    {
+        printf("%s\n", *tab);
+        tab++;
+    }
     
-// }
-// void print_command(t_command commands ,t_hash_map *env)
-// {
-
-//           ft_lstiter(commands.args, &printss);
-//           printf("in file: ");
-//           ft_lstiter(commands.in_redx, &prints);
-//           printf("\nout file: ");
-//           ft_lstiter(commands.out_redx, &prints);
-//         printf("---------------------------------------\n");
-// }
-
-void print_shell(void)
+}
+void print_command(t_command commands ,t_hash_map *env)
 {
 
+          ft_lstiter(commands.args, &printss);
+          printf("in file: ");
+          ft_lstiter(commands.in_redx, &prints);
+          printf("\nout file: ");
+          ft_lstiter(commands.out_redx, &prints);
+        printf("---------------------------------------\n");
+}
+
+void print_shell(int flag)
+{
+    if (flag)
+        ft_putstr_fd("\33[2K\r", STDOUT_FILENO);
     ft_putstr_fd(BGRN, STDOUT_FILENO);
     ft_putstr_fd("my_shell😎>", STDOUT_FILENO);
     ft_putstr_fd(RESET, STDOUT_FILENO);
@@ -40,13 +41,12 @@ void print_shell(void)
 //need to be done
 void  sig_handler(int sig)
 {
-    ft_putstr_fd("\b\b  \b\b", 2);
+    ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
     // print_shell();
     if (sig == SIGINT)
     {
         ft_putstr_fd("\n",STDOUT_FILENO);
-        ft_putstr_fd("\33[2K\r", STDOUT_FILENO);
-        print_shell();
+        print_shell(1);
     }
     // signal(sig, SIG_IGN);
 }
@@ -110,8 +110,6 @@ int main (int argc, char *argv[], char **envs)
     char *line;
     t_hash_map *env;
     int i = 1;
-    argv = 0;
-    argc = 0;
 
     
 
@@ -121,8 +119,10 @@ int main (int argc, char *argv[], char **envs)
     ignore_signals();
     while (i > 0)
     {
-        print_shell();
+        print_shell(0);
+	//system("/bin/stty raw");
         i = get_next_line(STDIN_FILENO, &line);
+	//system("/bin/stty cooked");
         if (line[0])
             process_line(line, env);
         free(line);

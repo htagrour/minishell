@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <wait.h>
 #include <signal.h>
 #include "macros.h"
 #include "structs.h"

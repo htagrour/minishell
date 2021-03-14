@@ -15,7 +15,7 @@
 void					*ft_memccpy(void *des, const void *src,
 										int c, size_t n)
 {
-	size_t				i;
+
 	unsigned char		*des1;
 	const unsigned char	*src1;
 
@@ -24,7 +24,6 @@ void					*ft_memccpy(void *des, const void *src,
 		des1 = des;
 		src1 = src;
 	}
-	i = 0;
 	while (n--)
 	{
 		*des1++ = *src1++;

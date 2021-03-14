@@ -49,13 +49,11 @@ static int		get_word_number(char const *str, char del, int *wn)
 static char		**get_tokens(const char *str, int wnb, int del)
 {
 	char		**tab;
-	int			i;
 	int			j;
 	int			len;
 	t_var_bag	bag;
 
 	ft_bzero(&bag, sizeof(bag));
-	i = 0;
 	j = 0;
 	if (!(tab = malloc(sizeof(char*) * (wnb + 1))))
 		return (NULL);

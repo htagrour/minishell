@@ -27,7 +27,7 @@ SRC = 	srcs/utils/get_line/*.c\
 all : $(NAME)
 
 $(NAME): $(SRC)
-	@$(CC) $(SRC) $(CFLAGS) -o $(NAME)
+	@$(CC) $(SRC)  -o $(NAME)
 	
 clean:
 	@rm -rf *.o minishell.a

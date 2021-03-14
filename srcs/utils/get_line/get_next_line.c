@@ -53,6 +53,8 @@ int			add_line(char **str, int fd)
 		free_(&tem);
 		if (isthereaback(*str))
 			break ;
+		if (**str)
+			i = 1;
 	}
 	return (i);
 }
@@ -76,7 +78,7 @@ int			get_next_line(int fd, char **line)
 		counter++;
 	if (!(*line = ft_substr(rest, 0, counter)))
 		return (-1);
-	if (rest[counter] != '\n' && !read_value)
+	if (rest[counter]!= '\n' && !read_value)
 		return (free_(&rest));
 	ptr = rest;
 	if (!(rest = ft_strdup(rest + counter + 1)))
