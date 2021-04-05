@@ -6,11 +6,11 @@
 /*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 21:40:16 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/15 21:49:18 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:18:16 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_isprint(int c)
+int	ft_isprint(int c)
 {
 	return (c >= 32 && c <= 126);
 }

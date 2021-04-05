@@ -3,33 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   get_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 16:28:32 by fsarbout          #+#    #+#             */
-/*   Updated: 2021/03/13 16:58:56 by fsarbout         ###   ########.fr       */
+/*   Updated: 2021/04/05 15:59:46 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../minishell.h"
 
-void			get_argument(char **str, char **ptr,
-						t_var_bag *bag, t_hash_map *env)
+int	get_argument(char **str, char **ptr, t_var_bag *bag, t_hash_map *env)
 {
-	char		*temp;
-	int			len;
+	char	*temp;
+	int		len;
 
 	len = 0;
 	if (!conditions(**str, *bag, *(*str + 1)))
 	{
 		temp = *ptr;
-		if (**str != '$' || (bag->brack_flag && bag->spec_char == '\'') ||
-			(**str == '$' && belong("<>'\" ", *(*str + 1))))
+		if (**str != '$' || (bag->brack_flag && bag->spec_char == '\'')
+			|| (**str == '$' && (belong("<>'\" |", *(*str + 1))
+						|| !*(*str + 1))))
 			*ptr = ft_add_char(*ptr, **str);
 		else
 		{
 			(*str)++;
-			if (**str != '?')
-				while (*(*str + len) && !belong("<>'\" ?", *(*str + len)))
+			if (**str != '?' || !belong("<>'\"| \\?", **str))
+				while (*(*str + len) && !belong("<>'\"| \\?", *(*str + len)))
 					len++;
 			else
 				len++;
@@ -38,31 +38,32 @@ void			get_argument(char **str, char **ptr,
 		free(temp);
 	}
 	adjust_var_bag(bag, **str);
-	*str += (len) ? len : 1;
+	return (len);
 }
 
-int				extract_arg(t_command *command, char **str,
-						t_var_bag *bag, t_hash_map *env)
+int	extract_arg(t_command *command, char **str, t_var_bag *bag, t_hash_map *env)
 {
-	char		*arg;
+	char	*arg;
+	int		len;
 
 	arg = ft_strdup("");
-	while (**str &&
-			!((**str == ' ' || (is_red(**str) && !bag->slash_flag)) &&
-			!bag->brack_flag))
-		get_argument(str, &arg, bag, env);
-	if (arg[0])
-		ft_lstadd_back(&(command->args), ft_lstnew((void*)arg));
-	else
-		free(arg);
+	while (**str && !((**str == ' ' || (is_red(**str)
+					   	 && !bag->slash_flag)) && !bag->brack_flag))
+	{
+		len = get_argument(str, &arg, bag, env);
+		if (len)
+			*str += len;
+		else
+			*str += 1;
+	}
+	ft_lstadd_back(&(command->args), ft_lstnew((void*)arg));
 	return (1);
 }
 
-t_redx			*get_file(char **str, t_var_bag *bag, t_hash_map *env)
+t_redx	*get_file(char **str, t_var_bag *bag, int len, t_hash_map *env)
 {
-	t_redx		*red;
+	t_redx	*red;
 
-	(*str)++;
 	while (**str && **str == ' ')
 		(*str)++;
 	if (is_red(**str))
@@ -72,7 +73,13 @@ t_redx			*get_file(char **str, t_var_bag *bag, t_hash_map *env)
 		return (NULL);
 	red->file = ft_strdup("");
 	while (**str && !((is_red(**str) || **str == ' ') && !bag->brack_flag))
-		get_argument(str, &red->file, bag, env);
+	{
+		len = get_argument(str, &red->file, bag, env);
+		if (len)
+			*str += len;
+		else
+			*str += 1;
+	}
 	if (!red->file[0])
 	{
 		free(red->file);
@@ -82,12 +89,12 @@ t_redx			*get_file(char **str, t_var_bag *bag, t_hash_map *env)
 	return (red);
 }
 
-int				extract_file(t_command *command, char **str,
-							t_var_bag *bag, t_hash_map *env)
+int	extract_file(t_command *command, char **str
+		, t_var_bag *bag, t_hash_map *env)
 {
-	int			double_red;
-	int			type;
-	t_redx		*red;
+	int		double_red;
+	int		type;
+	t_redx	*red;
 
 	double_red = 0;
 	type = (**str == '<');
@@ -98,7 +105,8 @@ int				extract_file(t_command *command, char **str,
 		double_red = 1;
 		(*str)++;
 	}
-	red = get_file(str, bag, env);
+	*str += 1;
+	red = get_file(str, bag, 0, env);
 	if (!red)
 		return (-1);
 	red->type = double_red;
@@ -109,7 +117,7 @@ int				extract_file(t_command *command, char **str,
 	return (1);
 }
 
-int				get_cmd(t_command *command, char *str, t_hash_map *env)
+int	get_cmd(t_command *command, char *str, t_hash_map *env)
 {
 	t_var_bag	bag;
 
@@ -122,13 +130,16 @@ int				get_cmd(t_command *command, char *str, t_hash_map *env)
 			adjust_var_bag(&bag, *str);
 			str++;
 		}
-		if (is_red(*str) && !bag.slash_flag)
+		if (*str)
 		{
-			if (extract_file(command, &str, &bag, env) < 0)
-				return (print_error("syntax error", 258, env));
+			if (is_red(*str) && !bag.slash_flag)
+			{
+				if (extract_file(command, &str, &bag, env) < 0)
+					return (print_error("syntax error", 258, env));
+			}
+			else
+				extract_arg(command, &str, &bag, env);
 		}
-		else
-			extract_arg(command, &str, &bag, env);
 	}
 	return (0);
 }

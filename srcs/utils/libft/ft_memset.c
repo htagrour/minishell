@@ -6,7 +6,7 @@
 /*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 14:42:55 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/15 20:02:54 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:23:55 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	*ft_memset(void *b, int c, size_t len)
 {
-
 	unsigned char	*str;
 
 	str = b;

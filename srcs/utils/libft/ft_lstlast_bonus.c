@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 09:11:11 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/19 15:16:48 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:18:37 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list		*ft_lstlast(t_list *list)
+t_list	*ft_lstlast(t_list *list)
 {
 	t_list	*current_ele;
 

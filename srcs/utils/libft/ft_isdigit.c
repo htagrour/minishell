@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 21:26:05 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/15 21:28:41 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:16:09 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_isdigit(int c)
+int	ft_isdigit(int c)
 {
 	return (c >= '0' && c <= '9');
 }

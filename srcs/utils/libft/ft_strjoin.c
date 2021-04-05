@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 19:35:44 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/20 13:52:04 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/04/03 14:54:49 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,35 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 char 	*ft_add_char(const char *str, char c)
 {
-	int i;
-	char *tab;
+	int		len;
+	char	*tab;
 
-	i = ft_strlen(str);
-	tab = malloc(sizeof(char) * i + 2);
+	if (str)
+		len = ft_strlen(str);
+	else
+		len = 0;
+	tab = malloc(sizeof(char) * len + 2);
 	if (!tab)
-		return NULL;
-	ft_strlcpy(tab, str, i + 1);
-	tab[i++] = c;
-	tab[i] = 0;
+		return (NULL);
+	if (len)
+		ft_strlcpy(tab, str, len + 1);
+	tab[len++] = c;
+	tab[len] = 0;
+	return (tab);
+}
+
+char	*ft_del_char(const char *str)
+{
+	int		len;
+	char	*tab;
+
+	if (!*str)
+		return (NULL);
+	len = ft_strlen(str) - 1;
+	tab = malloc(sizeof(char) * len + 1);
+	if (!tab)
+		return (NULL);
+	ft_strlcpy(tab, str, len + 1);
+	tab[len] = 0;
 	return (tab);
 }

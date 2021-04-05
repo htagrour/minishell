@@ -6,7 +6,7 @@
 /*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 01:49:05 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/22 15:18:04 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:29:34 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	end_index(char const *s1, char const *set)
 	return (i);
 }
 
-char		*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
 	int		start;
 	int		end;

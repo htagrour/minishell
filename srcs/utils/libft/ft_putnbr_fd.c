@@ -6,13 +6,13 @@
 /*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:49:07 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/16 15:55:36 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:30:20 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void				ft_putnbr_fd(int nb, int fd)
+void	ft_putnbr_fd(int nb, int fd)
 {
 	unsigned int	a;
 

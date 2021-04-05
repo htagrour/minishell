@@ -6,13 +6,13 @@
 /*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 08:54:59 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/19 09:10:10 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:23:22 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_lstsize(t_list *list)
+int	ft_lstsize(t_list *list)
 {
 	int		size;
 

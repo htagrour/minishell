@@ -6,16 +6,14 @@
 /*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 15:20:45 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/20 13:06:53 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:26:08 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void					*ft_memccpy(void *des, const void *src,
-										int c, size_t n)
+void	*ft_memccpy(void *des, const void *src, int c, size_t n)
 {
-
 	unsigned char		*des1;
 	const unsigned char	*src1;
 

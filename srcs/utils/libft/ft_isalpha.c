@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 20:15:15 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/15 20:28:46 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:15:19 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_isalpha(int c)
+int	ft_isalpha(int c)
 {
 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 }

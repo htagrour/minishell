@@ -1,24 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
+/*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 01:08:02 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/19 15:15:07 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/04/03 15:26:31 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+t_list	*copy_list(t_list *lst)
+{
+	t_list	*copy;
+
+	while (lst && lst->prev)
+		lst = lst->prev;
+	copy = NULL;
+	while (lst)
+	{
+		ft_lstadd_back(&copy, ft_lstnew(ft_strdup(lst->content)));
+		lst = lst->next;
+	}
+	return (copy);
+}
+
 void	ft_lstadd_front(t_list **alst, t_list *new)
 {
 	if (*alst)
 	{
+		(*alst)->prev = new;
 		new->next = *alst;
-		*alst = new;
 	}
-	else
-		*alst = new;
+	*alst = new;
 }

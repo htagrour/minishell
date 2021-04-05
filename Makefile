@@ -3,37 +3,35 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+         #
+#    By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/22 16:29:25 by htagrour          #+#    #+#              #
-#    Updated: 2021/03/13 17:10:30 by fsarbout         ###   ########.fr        #
+#    Updated: 2021/04/05 16:14:41 by htagrour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-CC = gcc 
+CC = gcc -g -ltermcap
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 
-SRC = 	srcs/utils/get_line/*.c\
-		srcs/utils/libft/*.c\
-		srcs/utils/hash_table/*.c\
-		srcs/utils/*.c\
-		srcs/parsing/*.c\
-		srcs/execution/*.c\
-		main.c
-
+SRC = srcs/execution/*.c\
+	srcs/utils/*.c\
+	srcs/utils/get_line/*.c\
+	srcs/utils/hash_table/*.c\
+	srcs/parsing/*.c\
+	srcs/utils/libft/*.c\
+	*.c
+	
 all : $(NAME)
 
 $(NAME): $(SRC)
-	@$(CC) $(SRC)  -o $(NAME)
-	
+	@$(CC) $(CFLAGS) $(SRC) -o $(NAME) -g
 clean:
-	@rm -rf *.o minishell.a
+	@rm -rf *.o
 
 fclean: clean
 	@rm -rf $(NAME) 
-
 re:	fclean all
 	

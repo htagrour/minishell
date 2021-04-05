@@ -6,7 +6,7 @@
 /*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 15:04:37 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/20 12:47:16 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:27:24 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	*ft_memcpy(void *des, const void *src, size_t n)
 {
-
 	unsigned char		*des1;
 	const unsigned char	*src1;
 

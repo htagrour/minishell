@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fsarbout <fsarbout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 22:05:51 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/15 22:45:07 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:05:27 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 char	*ft_strchr(const char *s, int c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s[i] != (char)c)

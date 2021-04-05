@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: htagrour <htagrour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:17:57 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/20 18:29:22 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/30 17:52:11 by htagrour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list		*ft_lstnew(void *content)
+t_list	*ft_lstnew(void *content)
 {
 	t_list	*tab;
 
@@ -21,5 +21,6 @@ t_list		*ft_lstnew(void *content)
 		return (NULL);
 	tab->content = content;
 	tab->next = NULL;
+	tab->prev = NULL;
 	return (tab);
 }

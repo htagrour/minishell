@@ -6,7 +6,7 @@
 /*   By: htagrour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 02:53:17 by htagrour          #+#    #+#             */
-/*   Updated: 2019/10/22 00:07:22 by htagrour         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:08:02 by fsarbout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 static int	ft_isspace(int c)
 {
-	return (c == '\t' ||
-			c == '\v' ||
-			c == '\r' ||
-			c == '\n' ||
-			c == ' ' ||
-			c == '\f');
+	return (c == '\t' || c == '\v' || c == '\r'
+		 || c == '\n' || c == ' ' || c == '\f');
 }
 
 static void	remove_blank(const char *str, int *sign, int *i)
@@ -35,7 +31,7 @@ static void	remove_blank(const char *str, int *sign, int *i)
 		*i += 1;
 }
 
-int			ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	long	res;
 	int		sign;
